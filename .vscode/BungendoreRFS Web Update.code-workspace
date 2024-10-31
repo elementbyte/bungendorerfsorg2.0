@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "RFSACTIVCatchFunction",
+			"path": "../../RFSACTIVCatchFunction"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.yaml": "home-assistant"
+		}
+	}
+}
