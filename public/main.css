@@ -394,12 +394,10 @@ main {
     background-color: none !important;
 }
 
-
-
 .feature-card.compact h6 {
     margin-top: 5px;
     font-size: 0.9rem; /* Smaller font size */
-    align-items: right;
+    text-align: right; /* Align text to the right */
 }
 
 .feature-card.compact .card-content {
