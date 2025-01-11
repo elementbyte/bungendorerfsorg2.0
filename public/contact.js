@@ -22,6 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent the default form submission
 
+       // Disable the submit button to prevent multiple submissions
+       submitButton.disabled = true;
+
     // Replace the submit button text with a span indicating busy state
     const originalButtonText = submitButton.innerHTML;
     submitButton.innerHTML = '<span aria-busy="true"></span>';
@@ -53,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Restore the original submit button text
         submitButton.innerHTML = originalButtonText;
+        submitButton.disabled = false;
 
         // Wait for 2 seconds, then reset the form and remove the success message
         setTimeout(() => {
@@ -65,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error:", error);
         // Restore the original submit button text in case of error
         submitButton.innerHTML = originalButtonText;
+        submitButton.disabled = false;
       });
   });
 });
