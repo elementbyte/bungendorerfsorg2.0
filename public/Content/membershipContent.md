@@ -1,7 +1,11 @@
-The Bungendore Brigade has an active membership, we offer two regular training opportunties a month and numerous specialised sessions every year.
+### Join the Bungendore RFS: Make a Difference!
 
-It can take up to 12 months to be qualified to be a firefighter depending on the time of year and the scheduling of courses and assessments.
+**Become part of an active and dedicated team.** We provide regular training (twice monthly) plus specialized sessions throughout the year to keep your skills sharp.
 
-We encourage and welcome everyone to come down to the station on a Friday night from 7pm to join in our weekly truck and equipment maintenance to get a feel for the brigade and chat to our members before you formally apply.
+**Your Journey to Firefighter:** Qualification can take up to 12 months, depending on course availability and assessment schedules. We're with you every step of the way.
 
-[Membership and How to Apply](https://nswrfsprod.service-now.com/rfsembr?id=embr_rfs_role_explorer)
+**Curious? Visit Us!**
+We warmly invite you to our station any Friday night from 7 PM. Help with equipment checks, see the trucks, and chat with our friendly members. It's the perfect way to learn about brigade life before you apply.
+
+**Ready to take the next step?**
+[**Explore Roles & Apply for Membership Here**](https://nswrfsprod.service-now.com/rfsembr?id=embr_rfs_role_explorer)

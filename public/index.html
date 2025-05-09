@@ -11,12 +11,16 @@
     <!-- Link to Pico CSS for styling -->
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
     <!-- Link to custom CSS file -->
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -25,26 +29,22 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
 </head>
 
-<header id="header">
-    <article class="container-fluid" id="pageNav">
-        <nav>
-            <ul>
-                <li><img src="/Images/logo.png" alt="Bungendore Volunteer Rural Fire Brigade Logo" class="nav-logo">
-                </li>
-                <li><a class="whiteText contrast" href="#info">Fire Information</a></li>
-                <li><a class="whiteText contrast" href="#prepare">Prepare</a></li>
-                <li><a class="whiteText contrast" href="#membership">Membership</a></li>
-                <li><a class="whiteText contrast" href="#events">Events</a></li>
-            </ul>
-        </nav>
-    </article>
-</header>
-
 <body>
-
-
+<header id="siteHeader">
+    <nav id="mainNav">
+        <img src="/Images/logo.png" alt="Bungendore Rural Fire Brigade Logo" id="navLogo"> <!-- Updated alt text -->
+        <ul>
+            <li><a class="whiteText contrast" href="#info">Fire Information</a></li>
+            <li><a class="whiteText contrast" href="#prepare">Prepare</a></li>
+            <li><a class="whiteText contrast" href="#membership">Membership</a></li>
+            <li><a class="whiteText contrast" href="#events">Events</a></li>
+        </ul>
+    </nav>
+</header>
 
     <main class="container-fluid">
         <!-- Header section with navigation -->
@@ -55,18 +55,20 @@
                 <div id="heroLogo" class="logo"></div>
                 <div>
                     <h1>Bungendore Volunteer Rural Fire Brigade</h1>
+                    <p class="hero-cta">Stay Safe. Stay Informed.</p>
+                    <a href="#info" class="custom-button prominent-cta-button" role="button">Get Fire Updates</a>
                     <div class="button-container">
-                        <a target="_blank" href="https://www.rfs.nsw.gov.au" class="custom-button">NSW RFS</a>
+                        <a target="_blank" rel="noopener" href="https://www.rfs.nsw.gov.au" class="custom-button">RFS Website</a> <!-- Ensured consistency -->
                         <button id="contactUsBtn" target="_blank" href="#" class="custom-button">Contact Us</button>
-                        <a target="_blank"
+                        <a target="_blank" rel="noopener"
                             href="https://nswrfsprod.service-now.com/guardian_csp?id=guardian_index"
                             class="custom-button">Permits - Apply, Enquire, Notify</a>
-                            <a target="_blank"
+                            <a target="_blank" rel="noopener"
                             href="https://shoutforgood.com/fundraisers/bungendoreruralfirebrigade"
                             class="custom-button">Donate</a>
-                        <a href="https://facebook.com/BungendoreRFS" target="_blank"><i
+                        <a href="https://facebook.com/BungendoreRFS" target="_blank" rel="noopener" aria-label="Bungendore RFS Facebook Page"><i
                                 class="fab fa-facebook social-icon"></i></a>
-                        <a href="https://instagram.com/BungendoreRFS" target="_blank"><i
+                        <a href="https://instagram.com/BungendoreRFS" target="_blank" rel="noopener" aria-label="Bungendore RFS Instagram Page"><i
                                 class="fab fa-instagram social-icon"></i></a>
                     </div>
                 </div>
@@ -75,51 +77,53 @@
 
         <!-- Grid section with article cards -->
         <div class="container-fluid content-container">
-            <div class="grid summary-grid">
-                <article class="summaryCard">
+            <!-- Fire Information Card - Full Width -->
+            <div class="grid">
+                <article class="summaryCard status-panel" id="fireInfoSummaryCard">
                     <header class="red">
-                        <h3 class="whiteText">Fire Information in Our Area</h3>
+                        <h3>Fire Information</h3>
+                        <a href="#info" class="header-action-icon" aria-label="Learn more about Fire Information"><i class="fas fa-chevron-circle-right"></i></a>
                     </header>
-                    <div id="fireMessages">Stay updated with the latest fire information in our area.<br></div>
-                    <!-- Fire Danger Rating and Incident Count Table -->
-                    <div class="grid">
-                        <table id="fireDangerTable" class="summaryCard">
-                            <tr>
-                                <td id="fireDangerRatingCell"></td>
-                                <td id="incidentCountCell" style="text-align: center;"></td>
-                            </tr>
-                            <tr class="invisible-cell">
-                                <td><small>Fire Danger Rating</small></td>
-                                <td><small>Local Incidents</small></td>
-                            </tr>
-                        </table>
+                    <div id="fireMessages" class="fire-messages-banner">Latest fire danger ratings and local incident updates.</div>
+                    
+                    <div class="fire-info-grid">
+                        <div class="fire-info-panel fire-danger-panel">
+                            <h4>Fire Danger Rating</h4>
+                            <div id="fireDangerRatingCell" class="data-value"></div>
+                            <p id="fireDangerMessage" class="data-label"></p> 
+                        </div>
+                        <div class="fire-info-panel local-incidents-panel">
+                            <h4>Local Incidents</h4>
+                            <div id="incidentCountCell" class="data-value"></div> 
+                            <p class="data-label"><small>Current incidents in our area</small></p>
+                        </div>
                     </div>
-                    <p><a href="#info">Learn More</a></p>
+                    
                 </article>
+            </div>
+
+            <!-- Other Summary Cards - Grouped -->
+            <div class="grid">
                 <article class="summaryCard">
                     <header class="amber">
-                        <h3 class="whiteText">Prepare for Bushfires</h3>
+                        <h3>Prepare for Bushfires</h3>
+                        <a href="#prepare" class="header-action-icon" aria-label="Learn more about Preparing for Bushfires"><i class="fas fa-chevron-circle-right"></i></a>
                     </header>
-                    <p>We’ve seen the devastating impact that bush fires can have – on people, properties and
-                        communities.
-                        It’s important you take the time now to get ready for bush fires.
-                        It can take as little as five minutes to make your plan. Discuss it with your family so you know
-                        what you will do in the event of a fire.</p>
-                    <p><a href="#prepare">Learn More</a></p>
+                    <p>Bushfires are a real threat. Learn how to prepare your home, make a plan, and stay safe this fire season.</p>
                 </article>
                 <article class="summaryCard">
                     <header class="blue">
-                        <h3 class="whiteText">Membership</h3>
+                        <h3>Membership</h3>
+                        <a href="#membership" class="header-action-icon" aria-label="Learn more about Membership"><i class="fas fa-chevron-circle-right"></i></a>
                     </header>
-                    <p>Join our brigade and help protect our community.</p>
-                    <p><a href="#membership">Learn More</a></p>
+                    <p>Become a volunteer. Discover how you can contribute to protecting our community and learn new skills.</p>
                 </article>
                 <article class="summaryCard">
-                    <header class="green">
-                        <h3 class="whiteText">Community Events</h3>
+                    <header class="lime">
+                        <h3>Community Events</h3>
+                        <a href="#events" class="header-action-icon" aria-label="Learn more about Community Events"><i class="fas fa-chevron-circle-right"></i></a>
                     </header>
-                    <p>Participate in our community events and support our brigade.</p>
-                    <p><a href="#events">Learn More</a></p>
+                    <p>Get involved! Find out about upcoming community events, fundraisers, and brigade activities.</p>
                 </article>
             </div>
 
@@ -127,19 +131,19 @@
             <!-- Detailed sections for each topic with responsive grid -->
             <article id="info">
                 <header class="red">
-                    <h3 class="whiteText">Fire Information in Our Area</h3>
+                    <h3>Fire Information in Our Area</h3>
                 </header>
                 <div class="">
 
                     <div id="fireDangerTableContainer"></div>
                     <!-- Map section -->
-                    <div id="map" style="height: 500px; width: 100%;"></div>
+                    <div id="map"></div>
                     <div id="fireInfoContent"></div>
                     <div id="fireInfoTableContainer" class="grid-container"></div>
 
                     <article id="prepare">
                         <header class="amber">
-                            <h3 class="whiteText">Prepare for Bushfires</h3>
+                            <h3>Prepare for Bushfires</h3>
                         </header>
                         <div class="grid">
                             <div>
@@ -152,11 +156,11 @@
                                 <p>Bush fire is a part of life in New South Wales. So you need to live bush fire ready.
                                     That means knowing your risk and having a plan for what to do during a fire. You can
                                     make your plan online in as little as five minutes at <a
-                                        href="https://www.myfireplan.com.au" target="_blank">www.myfireplan.com.au</a>
+                                        href="https://www.myfireplan.com.au" target="_blank" rel="noopener">www.myfireplan.com.au</a>
                                 </p>
                                 <div id="BFDPContent"></div>
                                 <a href="https://nswrfsprod.service-now.com/guardian_csp?id=guardian_index"
-                                    target="_blank">Apply for a Fire Permit or Total Fire Ban exemption, notify us of a
+                                    target="_blank" rel="noopener">Apply for a Fire Permit or Total Fire Ban exemption, notify us of a
                                     planned burn, or to submit Fire Trails enquiries.</a>
 
                             </div>
@@ -165,13 +169,10 @@
 
                     <article id="membership">
                         <header class="blue">
-                            <h3 class="whiteText">Membership</h3>
+                            <h3>Membership</h3>
                         </header>
-                        <div class="grid">
+                        <div class="membership-grid">
                             <div id="membershipContent"></div>
-                        </div>
-                        <div class="grid">
-                            <!-- <img src="https://bungendorerfs.org/images/membership.jpg" alt="Membership"> -->
                             <div id="membershipSection">
                                 <h4>Upcoming Training Cutoff Dates</h4>
                                 <div id="membershipCalendar" class="calendar-widget"></div>
@@ -180,8 +181,8 @@
 
                     </article>
                     <article id="events">
-                        <header class="green">
-                            <h3 class="whiteText">Upcoming Events</h3>
+                        <header class="lime">
+                            <h3>Upcoming Events</h3>
                         </header>
                         <div class="grid">
                             <div>
@@ -207,12 +208,12 @@
         <article class="container-fluid grid" id="pageFoot">
             <article>
                 <header>
-                    <strong> Bungendore RFS</strong>
+                    <strong>Bungendore Rural Fire Brigade</strong> <!-- Updated text -->
                 </header>
                         <div class="social-icon">
-                            <a href="https://facebook.com/BungendoreRFS" target="_blank"><i
+                            <a href="https://facebook.com/BungendoreRFS" target="_blank" rel="noopener" aria-label="Bungendore RFS Facebook Page"><i
                                     class="fab fa-facebook social-icon"></i></a>
-                            <a href="https://instagram.com/BungendoreRFS" target="_blank"><i
+                            <a href="https://instagram.com/BungendoreRFS" target="_blank" rel="noopener" aria-label="Bungendore RFS Instagram Page"><i
                                     class="fab fa-instagram social-icon"></i></a>
                         </div>
             </article>
@@ -281,8 +282,6 @@
 </body>
 
 
-<!-- Include the leaflet library -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <!-- Include the marked library -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.0/luxon.min.js"></script>
@@ -290,11 +289,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
 
 <!-- Load my own scripts -->
-
-<script src="main.js"></script>
-<script src="map.js"></script>
-<script src="calendar.js"></script>
-<script src="contact.js"></script>
-<script src="dynamicContent.js"></script>
+<script src="js/main.js" defer></script>
+<script src="js/scroll.js" defer></script>
+<script src="js/map.js" defer></script>
+<script src="js/calendar.js" defer></script>
+<script src="js/contact.js" defer></script>
+<script src="js/dynamicContent.js" defer></script>
 
 </html>

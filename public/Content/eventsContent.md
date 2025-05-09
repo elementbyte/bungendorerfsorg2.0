@@ -1,2 +1,4 @@
+### Brigade at Your Event? Let's Connect!
 
-If you would like us to attend your event, please get in touch through the contact form above.
+Planning a community event? We'd love to be there if we can!
+Please reach out via our **Contact Form** to discuss how the Bungendore RFS might participate.
