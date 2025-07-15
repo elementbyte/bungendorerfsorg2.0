@@ -3,3 +3,11 @@ node_modules
 package-lock.json
 .env
 RFS-Style-Guide.md
+
+# macOS artifacts
+.DS_Store
+__MACOSX/
+
+# Backup files
+*~
+*.bak

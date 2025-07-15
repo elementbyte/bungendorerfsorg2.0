@@ -1,7 +1,7 @@
 :root {
     --margin: 0;
     --padding: 0;
-    --hero-height: calc(100vh - 70px); /* Adjusted for full viewport height below nav */
+    --hero-height: calc(100vh - 55px); /* Adjusted for smaller header height */
     --hero-bg: url('/Images/hero4.jpeg');
     --prepare-bg-light: url('https://bungendorerfs.org/images/prepare.jpg');
     --info-bg-light: url('https://bungendorerfs.org/images/info.jpg');
@@ -272,17 +272,9 @@ article.summaryCard > header.green {
     margin-top: calc(-1 * var(--pico-card-padding));
 }
 
+/* Additional styles for green headers */
 article > header.green,
 article.summaryCard > header.green {
-    padding: var(--space-md); /* Consistent padding */
-    margin-bottom: var(--space-lg); /* Space after the header, before content below it */
-    border-bottom: none; /* Remove Pico's default border for article > header */
-    border-radius: var(--pico-border-radius) var(--pico-border-radius) 0 0; /* Top corners rounded */
-    
-    margin-left: calc(-1 * var(--pico-card-padding));
-    margin-right: calc(-1 * var(--pico-card-padding));
-    margin-top: calc(-1 * var(--pico-card-padding));
-
     display: flex; 
     justify-content: space-between;
     align-items: center;
@@ -648,12 +640,12 @@ a:focus {
     color: var(--text-color-light);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     transition: background-color 0.3s ease, padding 0.3s ease; /* Added padding transition */
-    padding: var(--space-sm) 0; /* Initial padding */
+    padding: var(--space-xs) 0; /* Reduced initial padding for more compact header */
 }
 
 #siteHeader.scrolled {
     background-color: var(--header-background-shade);
-    padding: var(--space-xs) 0; /* Reduced padding when scrolled */
+    padding: 0; /* Even more compact when scrolled */
 }
 
 /* Main Navigation - Inside the header */
@@ -661,7 +653,7 @@ a:focus {
     display: flex;
     justify-content: space-between; /* Distribute space: logo left, links right */
     align-items: center;
-    padding: var(--space-sm) var(--space-lg);
+    padding: var(--space-xs) var(--space-lg); /* Reduced vertical padding */
     width: 100%;
     box-sizing: border-box;
     position: relative; /* For z-index stacking if needed, and containing absolute elements */
@@ -669,7 +661,7 @@ a:focus {
 }
 
 #navLogo {
-    height: 40px; /* Adjust as needed */
+    height: 35px; /* Reduced from 40px for more compact header */
     width: auto;
     transition: opacity 0.3s ease, transform 0.3s ease;
     transform: scale(0.9); /* Slightly smaller to begin with */
@@ -712,7 +704,7 @@ a:focus {
     text-decoration: none;
     color: var(--text-color-light); /* Assuming header has dark background */
     font-weight: 500;
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-xs) var(--space-md); /* Reduced vertical padding */
     border-radius: var(--pico-border-radius);
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
@@ -854,8 +846,8 @@ a:focus {
 
 /* Main Content Styles */
 main {
-    margin-top: 70px; /* Offset main content for the fixed 70px navbar */
-    padding-top: 90px; /* Adjust this value to match initial #siteHeader height + some buffer */
+    margin-top: 55px; /* Reduced to match smaller header height */
+    padding-top: 20px; /* Significantly reduced top padding */
     padding-right: 0; /* Retain original horizontal padding (was 0) */
     padding-bottom: var(--space-lg); /* Retain original bottom padding */
     padding-left: 0; /* Retain original horizontal padding (was 0) */
@@ -999,14 +991,7 @@ main {
     font-size: 0.9em;
 }
 
-/* Element to Proof Styles */
-.elementToProof {
-    all: unset !important;
-    display: block;
-    font-family: var(--font-family);
-    font-size: var(--font-size);
-    color: var(--color);
-}
+
 
 /* Grid Container Styles */
 .grid-container {
@@ -1026,10 +1011,6 @@ main {
 }
 
 /* Miscellaneous Styles */
-.invisible-cell td {
-    border: none;
-    background-color: transparent;
-}
 
 /* Enhanced Fire Info Summary Card Styles */
 #fireInfoSummaryCard .fire-info-compact {
@@ -1226,22 +1207,21 @@ main {
 
 /* Dark Mode for Fire Info Summary Card */
 @media (prefers-color-scheme: dark) {
-    #fireInfoSummaryCard .fire-messages-banner {
+    #fireInfoSummaryCard .fire-messages-banner,
+    #fireInfoSummaryCard.status-panel .fire-messages-banner {
         background-color: var(--rfs-neutral-dark); 
-        border-left-color: var(--ui-amber-dark); 
         color: var(--text-color-dark); 
     }
-
+    
+    #fireInfoSummaryCard .fire-messages-banner {
+        border-left-color: var(--ui-amber-dark); 
+    }
+    
     #fireInfoSummaryCard.status-panel .fire-messages-banner {
-        background-color: var(--rfs-neutral-dark);
         border-left-color: var(--ui-blue-dark);
-        color: var(--text-color-dark);
     }
 
-    #fireInfoSummaryCard.status-panel .fire-info-panel h4 {
-        color: var(--text-color-dark);
-    }
-
+    #fireInfoSummaryCard.status-panel .fire-info-panel h4,
     #incidentCountCell.data-value { 
         color: var(--text-color-dark);
     }
@@ -1283,22 +1263,7 @@ main {
 }
 
 .icon-category-cell,
-#icon-category-cell {
-    text-align: center;
-    vertical-align: middle;
-}
 
-.icon-category-cell img,
-#icon-category-cell img {
-    display: block;
-    margin: 0 auto;
-}
-
-.icon-category-cell span,
-#icon-category-cell span {
-    display: block;
-    margin-top: 5px;
-}
 
 .calendar-widget {
     border: 1px solid var(--rfs-neutral-medium);
@@ -1381,9 +1346,7 @@ details > *:not(summary) {
         display: block !important;
     }
 
-    .summary-card {
-        display: none !important;
-    }
+
 
     h1 {
         font-size: 2rem;
@@ -1402,7 +1365,7 @@ details > *:not(summary) {
     .hero {
         height: auto; /* Let content define height, making it more compact */
         min-height: 0; /* Reset min-height */
-        padding: var(--space-md) var(--space-sm) var(--space-xl) var(--space-sm); /* Reduced horizontal padding */
+        padding: var(--space-lg) var(--space-sm) var(--space-xl) var(--space-sm); /* Increased top padding to prevent header overlap */
         display: flex; /* Ensure flex context for children */
         flex-direction: column; /* Stack children vertically */
         align-items: center; /* Center children horizontally */
@@ -1443,6 +1406,7 @@ details > *:not(summary) {
         align-items: center; /* Center buttons in the column */
         gap: var(--space-sm);
         width: 100%;
+        margin-bottom: var(--space-lg); /* Add bottom margin to separate from content below */
     }
     .custom-button { /* This targets all custom buttons, including those in hero */
         width: 100%;
@@ -1459,7 +1423,7 @@ details > *:not(summary) {
     /* Ensure the container for "Fire Information in Our Area" title is visible */
     .hero + .container-fluid.content-container {
         display: block !important; /* Make sure this container is visible */
-        margin-top: var(--space-lg);  /* Add space below hero, remove negative margin */
+        margin-top: var(--space-xl);  /* Increased space below hero for better separation */
         position: static;       /* Reset position from desktop peeking effect */
         z-index: auto;          /* Reset z-index */
     }
@@ -1471,8 +1435,17 @@ details > *:not(summary) {
 
 /* Mobile navigation improvements */
 @media (max-width: 768px) {
+    #siteHeader {
+        padding: 0; /* Remove all padding on mobile for maximum compactness */
+    }
+    
     #mainNav {
-        padding: var(--space-sm) var(--space-md); /* Reduce padding on mobile */
+        padding: var(--space-xs) var(--space-md); /* Further reduced padding on mobile */
+        min-height: 45px; /* Set minimum height for mobile header */
+    }
+    
+    #navLogo {
+        height: 30px; /* Smaller logo on mobile */
     }
     
     #mainNav ul {
@@ -1481,34 +1454,52 @@ details > *:not(summary) {
     }
     
     #mainNav ul li {
-        margin-left: var(--space-sm); /* Reduce spacing between nav items */
+        margin-left: var(--space-xs); /* Further reduced spacing between nav items */
     }
     
     #mainNav ul li a {
-        padding: var(--space-sm) var(--space-sm); /* Reduce padding in nav links */
+        padding: var(--space-xs) var(--space-sm); /* Minimal padding in nav links */
         font-size: 0.85rem; /* Smaller font for nav links */
+    }
+    
+    main {
+        margin-top: 45px; /* Reduced for mobile header height */
+        padding-top: 10px; /* Minimal top padding on mobile */
     }
 }
 
 @media (max-width: 480px) {
+    #siteHeader {
+        padding: 0; /* No padding on very small screens */
+    }
+    
     #mainNav {
-        flex-direction: column; /* Stack logo and nav vertically on very small screens */
-        align-items: center;
-        gap: var(--space-sm);
+        padding: var(--space-xs) var(--space-sm); /* Minimal padding on very small screens */
+        min-height: 40px; /* Even smaller header on very small screens */
+    }
+    
+    #navLogo {
+        height: 25px; /* Very small logo on tiny screens */
     }
     
     #mainNav ul {
         justify-content: center; /* Center navigation items */
         width: 100%;
+        gap: var(--space-xs);
     }
     
     #mainNav ul li {
-        margin-left: var(--space-xs); /* Further reduce spacing */
+        margin-left: 0; /* Remove left margin, use gap instead */
     }
     
     #mainNav ul li a {
-        padding: var(--space-xs) var(--space-sm); /* Minimal padding */
-        font-size: 0.8rem; /* Even smaller font */
+        padding: var(--space-xs) var(--space-xs); /* Minimal padding */
+        font-size: 0.75rem; /* Smaller font for very small screens */
+    }
+    
+    main {
+        margin-top: 40px; /* Reduced for very small mobile header */
+        padding-top: 5px; /* Minimal top padding */
     }
 }
 }
@@ -1618,7 +1609,7 @@ details > *:not(summary) {
 }
 
 /* Compact styling for buttons within cards, including the "Learn More" button */
-.summary-card .btn,
+.summaryCard .btn,
 .highlight-box .btn { /* Target buttons within summary cards and highlight boxes */
     padding: 0.4rem 0.8rem; /* Smaller padding */
     font-size: 0.9rem;    /* Smaller font size */
