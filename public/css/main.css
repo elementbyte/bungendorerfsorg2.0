@@ -1511,3 +1511,7 @@ details > *:not(summary) {
     font-size: 0.9rem;    /* Smaller font size */
     margin-top: 0.5rem;   /* Compact top margin */
 }
+
+#pageFoot {
+    border: none !important
+}
