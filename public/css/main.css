@@ -763,18 +763,28 @@ a:focus {
 }
 
 #pageFoot article {
-    background-color: transparent; /* Footer articles shouldn't have their own card background */
-    border: none; /* No borders for footer articles */
-    box-shadow: none; /* No shadow for footer articles */
-    padding: 0; /* Reset padding, #footer handles it */
-    margin-bottom: 0; /* Reset margin */
-    color: inherit; /* Inherit text color from #footer */
+    background-color: var(--pico-card-background-color); /* Give footer articles a card background for visibility */
+    border: 1px solid var(--pico-card-border-color); /* Add subtle border for definition */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add subtle shadow for depth */
+    padding: var(--space-md); /* Add padding for better spacing */
+    margin-bottom: 0; /* Remove margin since grid gap handles spacing */
+    color: var(--text-color-dark); /* Use dark text color for better contrast */
+    border-radius: var(--pico-border-radius); /* Add rounded corners */
+    width: 100%; /* Ensure cards fill available grid space */
+    box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
 #pageFoot article header {
-    margin-bottom: var(--space-sm);
-    color: var(--rfs-white); /* Brighter white for headers in footer */
+    background-color: var(--rfs-core-red); /* Red background for footer headers */
+    color: var(--rfs-white); /* White text for contrast */
+    padding: var(--space-sm) var(--space-md); /* Add padding for better spacing */
+    margin: calc(-1 * var(--space-md)) calc(-1 * var(--space-md)) var(--space-md) calc(-1 * var(--space-md)); /* Negative margins to align with card edges */
+    border-radius: var(--pico-border-radius) var(--pico-border-radius) 0 0; /* Rounded top corners */
     font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
 }
 
 #pageFoot article header strong {
@@ -783,8 +793,17 @@ a:focus {
 
 #pageFoot article p {
     font-size: 0.9rem;
-    color: var(--rfs-light-grey); /* Ensure p text is light grey */
+    color: var(--text-color-dark); /* Use dark text for better contrast on light card background */
     max-width: none; /* Allow footer text to fill its container */
+    margin-top: var(--space-sm); /* Add space after header */
+}
+
+#pageFoot .social-icon {
+    margin-top: var(--space-sm); /* Add space above social icons */
+    display: flex;
+    gap: var(--space-sm); /* Add space between social icons */
+    align-items: center;
+    justify-content: flex-start; /* Align icons to the left */
 }
 
 #pageFoot article img {
@@ -794,12 +813,14 @@ a:focus {
 }
 
 #pageFoot .social-icon a i {
-    color: var(--rfs-white); /* White social icons in footer */
+    color: var(--rfs-core-red); /* Red social icons in footer for visibility on light card background */
     font-size: 1.5rem; /* Adjust size as needed */
+    display: inline-block; /* Ensure proper spacing */
+    margin-right: var(--space-sm); /* Add space between icons */
 }
 
 #pageFoot .social-icon a:hover i {
-    color: var(--rfs-lime); /* Lime on hover */
+    color: var(--ui-blue); /* Blue on hover for better contrast */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -808,19 +829,27 @@ a:focus {
         color: var(--rfs-light-grey);
     }
 
+    #pageFoot article {
+        background-color: var(--pico-card-background-color); /* Dark mode card background */
+        border-color: var(--pico-card-border-color); /* Dark mode border */
+        color: var(--pico-card-text-color); /* Dark mode text */
+    }
+
     #pageFoot article header {
+        background-color: var(--rfs-core-red); /* Keep red header in dark mode */
         color: var(--rfs-white);
     }
 
     #pageFoot article p {
-        color: var(--rfs-light-grey);
+        color: var(--pico-card-text-color); /* Dark mode text for paragraphs */
     }
+    
     #pageFoot .social-icon a i {
-        color: var(--rfs-white);
+        color: var(--rfs-white); /* White social icons in footer for dark mode */
     }
 
     #pageFoot .social-icon a:hover i {
-        color: var(--rfs-lime);
+        color: var(--rfs-lime); /* Lime on hover for dark mode */
     }
 }
 
@@ -836,6 +865,13 @@ main {
 
 .content-container {
     padding: var(--space-md) var(--space-lg);
+}
+
+/* Reduce horizontal padding on mobile for better space utilization */
+@media (max-width: 768px) {
+    .content-container {
+        padding: var(--space-md) var(--space-sm);
+    }
 }
 
 /* Footer Styles */
@@ -1253,7 +1289,7 @@ details > *:not(summary) {
     .hero {
         height: auto; /* Let content define height, making it more compact */
         min-height: 0; /* Reset min-height */
-        padding: var(--space-lg) var(--space-md) var(--space-xl) var(--space-md); /* T R B L, more bottom padding for buttons */
+        padding: var(--space-md) var(--space-sm) var(--space-xl) var(--space-sm); /* Reduced horizontal padding */
         display: flex; /* Ensure flex context for children */
         flex-direction: column; /* Stack children vertically */
         align-items: center; /* Center children horizontally */
@@ -1320,13 +1356,48 @@ details > *:not(summary) {
         display: none !important;
     }
 
+/* Mobile navigation improvements */
+@media (max-width: 768px) {
+    #mainNav {
+        padding: var(--space-sm) var(--space-md); /* Reduce padding on mobile */
+    }
+    
     #mainNav ul {
         gap: var(--space-xs); /* Reduce gap between nav items */
+        flex-wrap: wrap; /* Allow wrapping if needed */
     }
+    
+    #mainNav ul li {
+        margin-left: var(--space-sm); /* Reduce spacing between nav items */
+    }
+    
     #mainNav ul li a {
         padding: var(--space-sm) var(--space-sm); /* Reduce padding in nav links */
-        font-size: 0.9rem; /* Slightly smaller font for nav links */
+        font-size: 0.85rem; /* Smaller font for nav links */
     }
+}
+
+@media (max-width: 480px) {
+    #mainNav {
+        flex-direction: column; /* Stack logo and nav vertically on very small screens */
+        align-items: center;
+        gap: var(--space-sm);
+    }
+    
+    #mainNav ul {
+        justify-content: center; /* Center navigation items */
+        width: 100%;
+    }
+    
+    #mainNav ul li {
+        margin-left: var(--space-xs); /* Further reduce spacing */
+    }
+    
+    #mainNav ul li a {
+        padding: var(--space-xs) var(--space-sm); /* Minimal padding */
+        font-size: 0.8rem; /* Even smaller font */
+    }
+}
 }
 
 @media (max-width: 500px) {
@@ -1352,10 +1423,6 @@ details > *:not(summary) {
     .custom-button {
         font-size: 0.85rem;
         padding: var(--space-xs) var(--space-sm);
-    }
-    #mainNav ul li a {
-        font-size: 0.8rem;
-        padding: var(--space-xs) var(--space-xs);
     }
 }
 
