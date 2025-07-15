@@ -412,58 +412,57 @@ a:focus {
 }
 
 #fireInfoSummaryCard.status-panel header.red {
-    display: none; /* Hide the original "Fire Information" h3 header */
+    display: flex; /* Show the header with enhanced styling */
+    justify-content: space-between;
+    align-items: center;
 }
 
-#fireInfoSummaryCard.status-panel .fire-messages-banner {
-    font-size: 0.9rem;
-    padding: var(--space-sm);
-    margin-bottom: var(--space-md);
-    background-color: var(--rfs-neutral-light);
-    border-left-color: var(--ui-blue); /* Changed to blue for general info */
-}
-
-#fireInfoSummaryCard.status-panel .fire-info-grid {
+#fireInfoSummaryCard.status-panel header.red h3 {
+    display: flex;
+    align-items: center;
     gap: var(--space-sm);
+    margin: 0;
+    font-size: 1.25rem;
 }
 
-#fireInfoSummaryCard.status-panel .fire-info-panel {
-    padding: var(--space-sm);
-    background-color: transparent; /* Panels transparent, card has bg */
-    border: none; /* Remove individual panel borders */
-}
 
-#fireInfoSummaryCard.status-panel .fire-info-panel h4 {
-    font-size: 0.9rem;
-    margin-bottom: var(--space-xs);
-    color: var(--rfs-dark-grey);
-}
-
-#fireInfoSummaryCard.status-panel .fire-info-panel .data-value {
-    font-size: 1.8rem; /* Slightly smaller for status panel */
-    min-height: initial; /* Changed from auto to initial */
-    padding: var(--space-xs);
-}
-
-#fireInfoSummaryCard.status-panel .fire-info-panel .data-label {
-    font-size: 0.8rem;
-}
-
-/* Dark Mode for Fire Info Summary Card */
+/* Dark Mode for Enhanced Fire Info Summary Card */
 @media (prefers-color-scheme: dark) {
     #fireInfoSummaryCard .fire-messages-banner {
-        background-color: var(--rfs-neutral-dark); 
-        border-left-color: var(--ui-amber-dark); 
-        color: var(--text-color-dark); 
-    }
-
-    #fireInfoSummaryCard.status-panel .fire-messages-banner {
         background-color: var(--rfs-neutral-dark);
         border-left-color: var(--ui-blue-dark);
         color: var(--text-color-dark);
     }
+    
+    #fireInfoSummaryCard .fire-messages-banner i {
+        color: var(--ui-blue-dark);
+    }
 
-    #fireInfoSummaryCard.status-panel .fire-info-panel h4 {
+    .fire-info-panel {
+        background-color: var(--rfs-neutral-dark);
+        border-color: #4a4a4a;
+    }
+
+    .fire-info-panel .panel-header h4 {
+        color: var(--text-color-dark);
+    }
+    
+    .fire-info-panel .data-value.primary-metric,
+    .fire-info-panel .data-value.secondary-metric {
+        background-color: var(--pico-card-background-color);
+        border-color: var(--pico-card-border-color);
+        color: var(--text-color-dark);
+    }
+    
+    .fire-info-panel .data-label {
+        color: var(--text-color-dark);
+    }
+    
+    .fire-info-actions {
+        border-top-color: #4a4a4a;
+    }
+    
+    #incidentCountCell.data-value { 
         color: var(--text-color-dark);
     }
 }
@@ -1032,58 +1031,172 @@ main {
     background-color: transparent;
 }
 
-/* Fire Info Summary Card Styles */
-#fireInfoSummaryCard .fire-messages-banner {
-    font-weight: bold;
-    margin-bottom: var(--space-md);
-    padding: var(--space-sm);
-    background-color: var(--rfs-neutral-medium); 
-    border-left: 5px solid var(--ui-amber);
-    border-radius: var(--pico-border-radius);
-    text-align: center;
+/* Enhanced Fire Info Summary Card Styles */
+#fireInfoSummaryCard .fire-info-compact {
+    padding: 0;
 }
 
-.fire-info-grid {
+#fireInfoSummaryCard .fire-messages-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+    background-color: var(--rfs-neutral-light);
+    border-left: 4px solid var(--ui-blue);
+    border-radius: var(--pico-border-radius);
+    font-weight: 500;
+}
+
+#fireInfoSummaryCard .fire-messages-banner i {
+    color: var(--ui-blue);
+    font-size: 1rem;
+}
+
+.fire-info-grid-enhanced {
     display: grid;
-    grid-template-columns: 1fr; /* Single column by default for mobile */
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-md);
 }
 
 .fire-info-panel {
-    padding: var(--space-md);
-    border: 1px solid var(--pico-card-border-color); /* Use existing card border color */
+    background-color: var(--rfs-neutral-light);
     border-radius: var(--pico-border-radius);
-    text-align: center; /* Center align all text within the panel */
-    background-color: var(--pico-card-background-color); /* Use existing card background color */
+    padding: var(--space-md);
+    border: 1px solid var(--rfs-light-grey);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fire-info-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.fire-info-panel .panel-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.fire-info-panel .panel-header i {
+    color: var(--rfs-core-red);
+    font-size: 1.1rem;
+}
+
+.fire-info-panel .panel-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color-dark);
+}
+
+.fire-info-panel .panel-content {
+    text-align: center;
 }
 
 .fire-info-panel .data-value {
-    font-size: 2.5rem; /* Impactful size for the rating/number */
+    font-size: 2rem;
     font-weight: bold;
     line-height: 1.1;
     margin-bottom: var(--space-xs);
-    min-height: 3rem; /* Ensure space even if data is N/A */
-    padding: var(--space-sm) var(--space-md); /* Add padding for panel look */
-    border-radius: var(--pico-border-radius); /* Rounded corners for the panel */
-    display: inline-block; /* Allow padding and centering */
-    /* Background color and text color are set by JavaScript for fireDangerRatingCell */
+    padding: var(--space-sm);
+    border-radius: var(--pico-border-radius);
+    display: inline-block;
+    min-width: 100px;
 }
 
-/* #fireDangerRatingCell.data-value color is set by JS */
-/* Ensure the JS-applied background color has enough contrast with text */
-#fireDangerRatingCell.data-value {
-    min-width: 100px; /* Give it a minimum width */
+.fire-info-panel .data-value.primary-metric {
+    background-color: var(--rfs-white);
+    border: 2px solid var(--rfs-light-grey);
 }
 
-#incidentCountCell.data-value {
+.fire-info-panel .data-value.secondary-metric {
+    background-color: var(--rfs-white);
+    border: 1px solid var(--rfs-light-grey);
     color: var(--rfs-dark-grey);
 }
 
 .fire-info-panel .data-label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--rfs-dark-grey);
-    margin-top: 0;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.fire-info-actions {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: center;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--rfs-light-grey);
+}
+
+.quick-action-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md);
+    background-color: var(--rfs-core-red);
+    color: var(--rfs-white);
+    text-decoration: none;
+    border-radius: var(--pico-border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.quick-action-btn:hover {
+    background-color: #c42216;
+    transform: translateY(-1px);
+    color: var(--rfs-white);
+    text-decoration: none;
+}
+
+.quick-action-btn i {
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments for Enhanced Fire Info Card */
+@media (max-width: 768px) {
+    .fire-info-grid-enhanced {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
+    }
+    
+    .fire-info-panel .data-value {
+        font-size: 1.8rem;
+        min-width: 80px;
+    }
+    
+    .fire-info-actions {
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+    
+    .quick-action-btn {
+        justify-content: center;
+        padding: var(--space-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    #fireInfoSummaryCard .fire-messages-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-xs);
+    }
+    
+    .fire-info-panel .panel-header {
+        justify-content: center;
+    }
+    
+    .fire-info-panel .data-value {
+        font-size: 1.6rem;
+        min-width: 70px;
+    }
 }
 
 #fireInfoSummaryCard .learn-more-link {
@@ -1351,8 +1464,8 @@ details > *:not(summary) {
         z-index: auto;          /* Reset z-index */
     }
 
-    /* Hide only the specific summary card(s) */
-    .summaryCard {
+    /* Hide only the specific summary card(s) - but keep fire info card visible */
+    .summaryCard:not(#fireInfoSummaryCard) {
         display: none !important;
     }
 

@@ -81,24 +81,51 @@
             <div class="grid">
                 <article class="summaryCard status-panel" id="fireInfoSummaryCard">
                     <header class="red">
-                        <h3>Fire Information</h3>
+                        <h3><i class="fas fa-fire"></i> Fire Information</h3>
                         <a href="#info" class="header-action-icon" aria-label="Learn more about Fire Information"><i class="fas fa-chevron-circle-right"></i></a>
                     </header>
-                    <div id="fireMessages" class="fire-messages-banner">Latest fire danger ratings and local incident updates.</div>
                     
-                    <div class="fire-info-grid">
-                        <div class="fire-info-panel fire-danger-panel">
-                            <h4>Fire Danger Rating</h4>
-                            <div id="fireDangerRatingCell" class="data-value"></div>
-                            <p id="fireDangerMessage" class="data-label"></p> 
+                    <div class="fire-info-compact">
+                        <div id="fireMessages" class="fire-messages-banner">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Latest fire danger ratings and local incident updates.</span>
                         </div>
-                        <div class="fire-info-panel local-incidents-panel">
-                            <h4>Local Incidents</h4>
-                            <div id="incidentCountCell" class="data-value"></div> 
-                            <p class="data-label"><small>Current incidents in our area</small></p>
+                        
+                        <div class="fire-info-grid-enhanced">
+                            <div class="fire-info-panel fire-danger-panel">
+                                <div class="panel-header">
+                                    <i class="fas fa-thermometer-half"></i>
+                                    <h4>Fire Danger Rating</h4>
+                                </div>
+                                <div class="panel-content">
+                                    <div id="fireDangerRatingCell" class="data-value primary-metric"></div>
+                                    <p id="fireDangerMessage" class="data-label"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="fire-info-panel local-incidents-panel">
+                                <div class="panel-header">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <h4>Local Incidents</h4>
+                                </div>
+                                <div class="panel-content">
+                                    <div id="incidentCountCell" class="data-value secondary-metric"></div>
+                                    <p class="data-label">Current incidents in our area</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="fire-info-actions">
+                            <a href="#info" class="quick-action-btn">
+                                <i class="fas fa-map-marked-alt"></i>
+                                View Map
+                            </a>
+                            <a href="#prepare" class="quick-action-btn">
+                                <i class="fas fa-shield-alt"></i>
+                                Prepare Now
+                            </a>
                         </div>
                     </div>
-                    
                 </article>
             </div>
 
