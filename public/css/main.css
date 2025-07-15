@@ -764,6 +764,7 @@ a:focus {
 
 #pageFoot article {
     background-color: var(--pico-card-background-color); /* Give footer articles a card background for visibility */
+    border: none; /* Remove borders from footer cards */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add subtle shadow for depth */
     padding: var(--space-md); /* Add padding for better spacing */
     margin-bottom: 0; /* Remove margin since grid gap handles spacing */
@@ -830,6 +831,7 @@ a:focus {
 
     #pageFoot article {
         background-color: var(--pico-card-background-color); /* Dark mode card background */
+        border: none; /* Remove borders from footer cards in dark mode */
         color: var(--pico-card-text-color); /* Dark mode text */
     }
 
