@@ -272,17 +272,9 @@ article.summaryCard > header.green {
     margin-top: calc(-1 * var(--pico-card-padding));
 }
 
+/* Additional styles for green headers */
 article > header.green,
 article.summaryCard > header.green {
-    padding: var(--space-md); /* Consistent padding */
-    margin-bottom: var(--space-lg); /* Space after the header, before content below it */
-    border-bottom: none; /* Remove Pico's default border for article > header */
-    border-radius: var(--pico-border-radius) var(--pico-border-radius) 0 0; /* Top corners rounded */
-    
-    margin-left: calc(-1 * var(--pico-card-padding));
-    margin-right: calc(-1 * var(--pico-card-padding));
-    margin-top: calc(-1 * var(--pico-card-padding));
-
     display: flex; 
     justify-content: space-between;
     align-items: center;
@@ -999,14 +991,7 @@ main {
     font-size: 0.9em;
 }
 
-/* Element to Proof Styles */
-.elementToProof {
-    all: unset !important;
-    display: block;
-    font-family: var(--font-family);
-    font-size: var(--font-size);
-    color: var(--color);
-}
+
 
 /* Grid Container Styles */
 .grid-container {
@@ -1026,10 +1011,6 @@ main {
 }
 
 /* Miscellaneous Styles */
-.invisible-cell td {
-    border: none;
-    background-color: transparent;
-}
 
 /* Enhanced Fire Info Summary Card Styles */
 #fireInfoSummaryCard .fire-info-compact {
@@ -1226,22 +1207,21 @@ main {
 
 /* Dark Mode for Fire Info Summary Card */
 @media (prefers-color-scheme: dark) {
-    #fireInfoSummaryCard .fire-messages-banner {
+    #fireInfoSummaryCard .fire-messages-banner,
+    #fireInfoSummaryCard.status-panel .fire-messages-banner {
         background-color: var(--rfs-neutral-dark); 
-        border-left-color: var(--ui-amber-dark); 
         color: var(--text-color-dark); 
     }
-
+    
+    #fireInfoSummaryCard .fire-messages-banner {
+        border-left-color: var(--ui-amber-dark); 
+    }
+    
     #fireInfoSummaryCard.status-panel .fire-messages-banner {
-        background-color: var(--rfs-neutral-dark);
         border-left-color: var(--ui-blue-dark);
-        color: var(--text-color-dark);
     }
 
-    #fireInfoSummaryCard.status-panel .fire-info-panel h4 {
-        color: var(--text-color-dark);
-    }
-
+    #fireInfoSummaryCard.status-panel .fire-info-panel h4,
     #incidentCountCell.data-value { 
         color: var(--text-color-dark);
     }
@@ -1283,22 +1263,7 @@ main {
 }
 
 .icon-category-cell,
-#icon-category-cell {
-    text-align: center;
-    vertical-align: middle;
-}
 
-.icon-category-cell img,
-#icon-category-cell img {
-    display: block;
-    margin: 0 auto;
-}
-
-.icon-category-cell span,
-#icon-category-cell span {
-    display: block;
-    margin-top: 5px;
-}
 
 .calendar-widget {
     border: 1px solid var(--rfs-neutral-medium);
@@ -1381,9 +1346,7 @@ details > *:not(summary) {
         display: block !important;
     }
 
-    .summary-card {
-        display: none !important;
-    }
+
 
     h1 {
         font-size: 2rem;
@@ -1618,7 +1581,7 @@ details > *:not(summary) {
 }
 
 /* Compact styling for buttons within cards, including the "Learn More" button */
-.summary-card .btn,
+.summaryCard .btn,
 .highlight-box .btn { /* Target buttons within summary cards and highlight boxes */
     padding: 0.4rem 0.8rem; /* Smaller padding */
     font-size: 0.9rem;    /* Smaller font size */
