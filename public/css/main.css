@@ -767,9 +767,11 @@ a:focus {
     border: 1px solid var(--pico-card-border-color); /* Add subtle border for definition */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add subtle shadow for depth */
     padding: var(--space-md); /* Add padding for better spacing */
-    margin-bottom: var(--space-md); /* Add margin between cards */
+    margin-bottom: 0; /* Remove margin since grid gap handles spacing */
     color: var(--text-color-dark); /* Use dark text color for better contrast */
     border-radius: var(--pico-border-radius); /* Add rounded corners */
+    width: 100%; /* Ensure cards fill available grid space */
+    box-sizing: border-box; /* Include padding and border in width calculation */
 }
 
 #pageFoot article header {
@@ -796,6 +798,14 @@ a:focus {
     margin-top: var(--space-sm); /* Add space after header */
 }
 
+#pageFoot .social-icon {
+    margin-top: var(--space-sm); /* Add space above social icons */
+    display: flex;
+    gap: var(--space-sm); /* Add space between social icons */
+    align-items: center;
+    justify-content: flex-start; /* Align icons to the left */
+}
+
 #pageFoot article img {
     max-height: 24px; /* Control icon size in footer */
     margin-right: var(--space-sm);
@@ -803,12 +813,14 @@ a:focus {
 }
 
 #pageFoot .social-icon a i {
-    color: var(--rfs-white); /* White social icons in footer */
+    color: var(--rfs-core-red); /* Red social icons in footer for visibility on light card background */
     font-size: 1.5rem; /* Adjust size as needed */
+    display: inline-block; /* Ensure proper spacing */
+    margin-right: var(--space-sm); /* Add space between icons */
 }
 
 #pageFoot .social-icon a:hover i {
-    color: var(--rfs-lime); /* Lime on hover */
+    color: var(--ui-blue); /* Blue on hover for better contrast */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -833,11 +845,11 @@ a:focus {
     }
     
     #pageFoot .social-icon a i {
-        color: var(--rfs-white);
+        color: var(--rfs-white); /* White social icons in footer for dark mode */
     }
 
     #pageFoot .social-icon a:hover i {
-        color: var(--rfs-lime);
+        color: var(--rfs-lime); /* Lime on hover for dark mode */
     }
 }
 
