@@ -763,7 +763,7 @@ a:focus {
 
 #pageFoot article {
     background-color: var(--pico-card-background-color); /* Give footer articles a card background for visibility */
-    border: 1px solid var(--pico-card-border-color); /* Add subtle border for definition */
+    border: none !important; /* Remove borders from footer cards */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add subtle shadow for depth */
     padding: var(--space-md); /* Add padding for better spacing */
     margin-bottom: 0; /* Remove margin since grid gap handles spacing */
@@ -830,7 +830,7 @@ a:focus {
 
     #pageFoot article {
         background-color: var(--pico-card-background-color); /* Dark mode card background */
-        border-color: var(--pico-card-border-color); /* Dark mode border */
+        border: none; /* Remove borders from footer cards in dark mode */
         color: var(--pico-card-text-color); /* Dark mode text */
     }
 
@@ -1623,4 +1623,8 @@ details > *:not(summary) {
     padding: 0.4rem 0.8rem; /* Smaller padding */
     font-size: 0.9rem;    /* Smaller font size */
     margin-top: 0.5rem;   /* Compact top margin */
+}
+
+#pageFoot {
+    border: none !important
 }
