@@ -116,6 +116,7 @@ See `Documentation/CSS_OPTIMIZATION.md` for detailed CSS architecture informatio
 Additional documentation can be found in the `/Documentation/` directory:
 - `ASSET_ORGANIZATION.md` - Complete guide to image and icon assets
 - `CSS_OPTIMIZATION.md` - CSS architecture and optimization details
+- `CODEBASE_REVIEW.md` - Comprehensive code quality review with top 10 issues and recommendations
 
 ## License
 
