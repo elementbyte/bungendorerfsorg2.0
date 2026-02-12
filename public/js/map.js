@@ -5,18 +5,8 @@ function initMap() {
     zoomControl: false, // Disable the zoom control
   });
 
-  // Fetch the Mapbox token from an external URL using a POST request
-  fetch(
-    "https://prod-13.eastasia.logic.azure.com:443/workflows/a1e2c15b9b8c4bc09f218255271f73b4/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=59cN9YlOmJPsmVOoixCmKXD2ZDhmk4ZjGEE-IXL1hOQ",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Request-ID": "Get-Mapbox-Token", // Custom header to identify the request
-      },
-      body: JSON.stringify({ request: "mapbox-token" }),
-    }
-  )
+  // Fetch the Mapbox token from the backend API
+  fetch("/mapbox-token")
     .then((response) => response.json())
     .then((data) => {
       const accessToken = data.token;
@@ -90,8 +80,7 @@ function initMap() {
       const markers = L.featureGroup().addTo(map);
 
       // Fetch GeoJSON data and add markers to the map
-      const targetUrl =
-        "https://prod-16.australiaeast.logic.azure.com:443/workflows/0e1db2551604467787d10a1079e2ca00/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=PPxJa5-zzi3BE7-vp98G6nDRymYIoRgvKw4lZU44Cv4";
+      const targetUrl = "/api/fire-incidents";
 
       fetch(targetUrl, {
         method: "GET",
@@ -244,7 +233,7 @@ function initMap() {
           }
 
           tableHTML += "</table>";
-          incidentCountCell.innerHTML = tableHTML;
+          incidentCountCell.innerHTML = DOMPurify.sanitize(tableHTML);
 
           // Ensure the station marker is included in the bounds calculation
           const stationIcon = L.icon({

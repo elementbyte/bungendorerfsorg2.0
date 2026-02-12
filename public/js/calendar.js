@@ -6,9 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeButton = document.getElementById("eventModalClose");
 
   // Fetch events data from the URL
-  fetch(
-    "https://prod-12.australiaeast.logic.azure.com:443/workflows/a975849d90b74eed9c08c780967fc18d/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=zRG6Cx6kxtdPpmuM4m5cSyhItIAAZhs-NqAa6WIF6Ts"
-  )
+  fetch("/api/calendar-events")
     .then((response) => response.json())
     .then((data) => {
       const events = data.value;
@@ -75,41 +73,4 @@ function displayEvents(events, container) {
 
     container.appendChild(eventElement);
   });
-}
-
-function showModal(event) {
-  const modal = document.getElementById("eventModal");
-  const modalContent = document.getElementById("modalEventContent");
-
-  // Clear previous content
-  modalContent.innerHTML = "";
-
-  // Add event details to modal
-  const titleElement = document.createElement("h2");
-  titleElement.textContent = event.subject;
-  modalContent.appendChild(titleElement);
-
-  const startDate = luxon.DateTime.fromISO(event.start.dateTime || event.start, { zone: "utc" }).setZone("Australia/Sydney");
-  const endDate = luxon.DateTime.fromISO(event.end.dateTime || event.end, { zone: "utc" }).setZone("Australia/Sydney");
-
-  const dateTimeElement = document.createElement("p");
-  dateTimeElement.textContent = event.isAllDay
-    ? `Date: ${startDate.toLocaleString(luxon.DateTime.DATE_MED)}`
-    : `Date: ${startDate.toLocaleString(luxon.DateTime.DATETIME_MED)} - ${endDate.toLocaleString(luxon.DateTime.DATETIME_MED)}`;
-  modalContent.appendChild(dateTimeElement);
-
-  if (event.location) {
-    const locationElement = document.createElement("p");
-    locationElement.textContent = `Location: ${event.location.displayName}`;
-    modalContent.appendChild(locationElement);
-  }
-
-  if (event.body) {
-    const descriptionElement = document.createElement("div");
-    descriptionElement.innerHTML = DOMPurify.sanitize(event.body);
-    modalContent.appendChild(descriptionElement);
-  }
-
-  // Show the modal
-  modal.setAttribute("open", "");
 }
