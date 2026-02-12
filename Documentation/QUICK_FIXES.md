@@ -100,11 +100,9 @@ BFDPContent.innerHTML = DOMPurify.sanitize(tableHTML);
 
 **main.js line 188:**
 ```javascript
-// Old:
+// Old and New - no change needed:
 fireDangerTableContainer.innerHTML = '';
-
-// New:
-fireDangerTableContainer.innerHTML = DOMPurify.sanitize('');
+// Note: Empty strings don't need sanitization
 ```
 
 **map.js line 247:**
