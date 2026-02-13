@@ -1,8 +1,15 @@
 secrets.env
 node_modules
-package-lock.json
 .env
 RFS-Style-Guide.md
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# IDE
+.vscode/
+.idea/
 
 # macOS artifacts
 .DS_Store

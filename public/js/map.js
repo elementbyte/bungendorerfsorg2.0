@@ -16,7 +16,7 @@ function initMap() {
         `https://api.mapbox.com/styles/v1/mapbox/navigation-guidance-day-v4/tiles/{z}/{x}/{y}?access_token=${accessToken}`,
         {
           attribution:
-            '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors',
+            "&copy; <a href=\"https://www.mapbox.com/about/maps/\">Mapbox</a> contributors",
         }
       );
 
@@ -24,7 +24,7 @@ function initMap() {
         `https://api.mapbox.com/styles/v1/mapbox/navigation-guidance-night-v4/tiles/{z}/{x}/{y}?access_token=${accessToken}`,
         {
           attribution:
-            '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> contributors',
+            "&copy; <a href=\"https://www.mapbox.com/about/maps/\">Mapbox</a> contributors",
         }
       );
 
@@ -55,7 +55,7 @@ function initMap() {
         } catch (error) {
           console.error("Error creating icon:", error);
           return L.divIcon({
-            html: '<i class="fa fa-fire" style="font-size: 32px; color: grey;"></i>',
+            html: "<i class=\"fa fa-fire\" style=\"font-size: 32px; color: grey;\"></i>",
             iconSize: [32, 32],
             className: "custom-div-icon",
           });
@@ -64,7 +64,7 @@ function initMap() {
 
       // Fallback icon in case custom icons fail
       const defaultIcon = L.divIcon({
-        html: '<i class="fa fa-fire" style="font-size: 32px; color: grey;"></i>',
+        html: "<i class=\"fa fa-fire\" style=\"font-size: 32px; color: grey;\"></i>",
         iconSize: [32, 32],
         className: "custom-div-icon",
       });
@@ -89,12 +89,7 @@ function initMap() {
           "Content-Type": "application/json",
         },
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch fire incidents");
-          }
-          return response.json();
-        })
+        .then((response) => response.json())
         .then((data) => {
           const features = Array.isArray(data?.features) ? data.features : [];
           const categoryCounts = {
@@ -117,14 +112,14 @@ function initMap() {
 
           // Filter features that contain "COUNCIL AREA: Queanbeyan-Palerang" or "COUNCIL AREA: ACT" in the description
           const filteredFeatures = isTest
-            ? features
-            : features.filter(
+            ? data.features
+            : data.features.filter(
                 (feature) =>
                   feature.properties &&
                   feature.properties.description &&
                   (feature.properties.description.includes("COUNCIL AREA: Queanbeyan-Palerang") ||
                     feature.properties.description.includes("COUNCIL AREA: ACT"))
-              );
+            );
 
           // Populate the table with filtered features
           populateFireInfoTable({ features: filteredFeatures });
@@ -328,15 +323,21 @@ function initMap() {
         })
         .catch((error) => {
           console.error("Error fetching the GeoJSON data:", error);
+          const errorMessage = getUserFriendlyErrorMessage(error);
           const incidentCountCell = document.getElementById("incidentCountCell");
           const incidentCountLabel = document.getElementById("incidentCountLabel");
+          const incidentTotalCount = document.getElementById("incidentTotalCount");
 
           if (incidentTotalCount) {
             incidentTotalCount.textContent = "0";
           }
 
           if (incidentCountCell) {
-            incidentCountCell.innerHTML = "";
+            incidentCountCell.innerHTML = DOMPurify.sanitize(`
+              <div role="alert" style="color: var(--rfs-error-color, #c33); padding: 1rem;">
+                <i class="fas fa-exclamation-triangle"></i> ${errorMessage}
+              </div>
+            `);
           }
 
           if (incidentCountLabel) {
@@ -357,7 +358,42 @@ function initMap() {
           }
         });
     })
-    .catch((error) => console.error("Error fetching Mapbox token:", error));
+     .catch((error) => {
+       console.error("Error fetching Mapbox token:", error);
+       // Display error on map container if available
+       const mapContainer = document.getElementById("map");
+       if (mapContainer) {
+         const errorMessage = getUserFriendlyErrorMessage(error);
+         mapContainer.innerHTML = DOMPurify.sanitize(`
+           <div role="alert" style="
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             height: 100%;
+             background-color: var(--rfs-error-bg, #fee);
+             border: 2px solid var(--rfs-error-border, #c33);
+             color: var(--rfs-error-color, #c33);
+             padding: 2rem;
+             text-align: center;
+           ">
+             <div>
+               <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+               <p style="font-weight: bold; margin-bottom: 0.5rem;">Unable to Load Map</p>
+               <p>${errorMessage}</p>
+               <button onclick="location.reload()" style="
+                 margin-top: 1rem;
+                 padding: 0.5rem 1rem;
+                 cursor: pointer;
+                 border: 1px solid var(--rfs-error-border, #c33);
+                 background-color: white;
+                 color: var(--rfs-error-color, #c33);
+                 border-radius: 4px;
+               ">Retry</button>
+             </div>
+           </div>
+         `);
+       }
+     });
 }
 
 // Ensure the map is initialized after the DOM content is loaded

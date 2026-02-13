@@ -5,14 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalContent = document.getElementById("modalEventContent");
   const closeButton = document.getElementById("eventModalClose");
 
+  // Show loading state
+  if (membershipCalendar) {
+    showLoadingMessage("membershipCalendar", "Loading training events...");
+  }
+  if (communityEventsCalendar) {
+    showLoadingMessage("communityEventsCalendar", "Loading community events...");
+  }
+
   // Fetch events data from the URL
   fetch("/api/calendar-events")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to fetch calendar events");
-      }
-      return response.json();
-    })
+    .then((response) => response.json())
     .then((data) => {
       const events = Array.isArray(data?.value) ? data.value : [];
 
@@ -30,11 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => {
       console.error("Error fetching events:", error);
+      const errorMessage = getUserFriendlyErrorMessage(error);
+      // Show error in both calendars
       if (membershipCalendar) {
-        membershipCalendar.innerHTML = "<p>Events are currently unavailable.</p>";
+        showErrorMessage("membershipCalendar", errorMessage, true);
       }
       if (communityEventsCalendar) {
-        communityEventsCalendar.innerHTML = "<p>Events are currently unavailable.</p>";
+        showErrorMessage("communityEventsCalendar", errorMessage, true);
       }
     });
 
