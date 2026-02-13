@@ -106,22 +106,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add appropriate class
     switch (level.toUpperCase()) {
-      case "HIGH":
-        emergencyStatusBar.classList.add("level-high");
-        break;
-      case "EXTREME":
-        emergencyStatusBar.classList.add("level-extreme");
-        break;
-      case "CATASTROPHIC":
-        emergencyStatusBar.classList.add("level-catastrophic");
-        break;
-      case "NO RATING":
-      case "N/A":
-      case "ERROR":
-        emergencyStatusBar.classList.add("level-none");
-        break;
-      default:
-        emergencyStatusBar.classList.add("level-moderate");
+    case "HIGH":
+      emergencyStatusBar.classList.add("level-high");
+      break;
+    case "EXTREME":
+      emergencyStatusBar.classList.add("level-extreme");
+      break;
+    case "CATASTROPHIC":
+      emergencyStatusBar.classList.add("level-catastrophic");
+      break;
+    case "NO RATING":
+    case "N/A":
+    case "ERROR":
+      emergencyStatusBar.classList.add("level-none");
+      break;
+    default:
+      emergencyStatusBar.classList.add("level-moderate");
     }
   }
 

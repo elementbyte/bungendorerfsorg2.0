@@ -30,7 +30,7 @@ function populateFireInfoTable(data) {
 
   if (features.length === 0) {
     fireInfoTableContainer.innerHTML = DOMPurify.sanitize(
-      '<p class="data-label">No active incidents in our area.</p>'
+      "<p class=\"data-label\">No active incidents in our area.</p>"
     );
     return;
   }

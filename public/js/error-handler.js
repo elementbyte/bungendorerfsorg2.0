@@ -28,7 +28,7 @@ function showErrorMessage(containerId, message, showRetry = true) {
     ">
       <i class="fas fa-exclamation-triangle" style="color: var(--rfs-error-color, #c33); margin-right: 0.5rem;"></i>
       <p style="margin: 0.5rem 0; color: var(--rfs-error-color, #c33); font-weight: bold;">${message}</p>
-      ${showRetry ? '<button onclick="location.reload()" style="margin-top: 0.5rem; padding: 0.5rem 1rem; cursor: pointer; border: 1px solid var(--rfs-error-border, #c33); background-color: white; color: var(--rfs-error-color, #c33); border-radius: 4px;">Retry</button>' : ""}
+      ${showRetry ? "<button onclick=\"location.reload()\" style=\"margin-top: 0.5rem; padding: 0.5rem 1rem; cursor: pointer; border: 1px solid var(--rfs-error-border, #c33); background-color: white; color: var(--rfs-error-color, #c33); border-radius: 4px;\">Retry</button>" : ""}
     </div>
   `;
 

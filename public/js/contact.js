@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Replace the submit button text with a span indicating busy state
     const originalButtonText = submitButton.innerHTML;
-    submitButton.innerHTML = '<span aria-busy="true"></span>';
+    submitButton.innerHTML = "<span aria-busy=\"true\"></span>";
 
     fetch(`${getApiBaseUrl()}/api/contact`, {
       method: "POST",
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Add phone validation on input
-  const phoneInput = document.querySelector('input[name="phone"]');
+  const phoneInput = document.querySelector("input[name=\"phone\"]");
   if (phoneInput) {
     phoneInput.addEventListener("input", () => {
       const phoneValue = phoneInput.value;
