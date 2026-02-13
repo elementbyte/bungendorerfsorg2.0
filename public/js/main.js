@@ -30,23 +30,15 @@ function populateFireInfoTable(data) {
 
   if (features.length === 0) {
     fireInfoTableContainer.innerHTML = DOMPurify.sanitize(
-      "<p class=\"data-label\">No active incidents in our area.</p>"
+      '<p class="data-label">No active incidents in our area.</p>'
     );
     return;
   }
 
   features.forEach((feature) => {
     const { title, category, description } = feature.properties;
-    const {
-      alertlevel,
-      location,
-      councilarea,
-      status,
-      type,
-      size,
-      responsibleagency,
-      updated,
-    } = extractFields(description);
+    const { alertlevel, location, councilarea, status, type, size, responsibleagency, updated } =
+      extractFields(description);
 
     const iconUrl = getIconUrl(category);
 

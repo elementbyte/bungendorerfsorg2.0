@@ -202,26 +202,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let targetIndex;
       switch (e.key) {
-      case "ArrowRight":
-        e.preventDefault();
-        targetIndex = (currentIndex + 1) % tabButtons.length;
-        tabButtons[targetIndex].focus();
-        break;
-      case "ArrowLeft":
-        e.preventDefault();
-        targetIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
-        tabButtons[targetIndex].focus();
-        break;
-      case "Home":
-        e.preventDefault();
-        tabButtons[0].focus();
-        break;
-      case "End":
-        e.preventDefault();
-        tabButtons[tabButtons.length - 1].focus();
-        break;
-      default:
-        break;
+        case "ArrowRight":
+          e.preventDefault();
+          targetIndex = (currentIndex + 1) % tabButtons.length;
+          tabButtons[targetIndex].focus();
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          targetIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+          tabButtons[targetIndex].focus();
+          break;
+        case "Home":
+          e.preventDefault();
+          tabButtons[0].focus();
+          break;
+        case "End":
+          e.preventDefault();
+          tabButtons[tabButtons.length - 1].focus();
+          break;
+        default:
+          break;
       }
     });
   });
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /**
    * Handle old hash links (backward compatibility)
    */
-  document.querySelectorAll("a[href^=\"#\"]").forEach((link) => {
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (e) => {
       const href = link.getAttribute("href");
 
