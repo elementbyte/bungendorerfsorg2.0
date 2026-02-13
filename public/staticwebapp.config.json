@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "route": "/mapbox-token",
+      "rewrite": "https://api.bungendorerfs.org/mapbox-token"
+    },
+    {
+      "route": "/api/*",
+      "rewrite": "https://api.bungendorerfs.org/api/*"
+    }
+  ]
+}
