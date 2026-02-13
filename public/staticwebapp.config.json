@@ -3,12 +3,12 @@
     {
       "route": "/mapbox-token",
       "redirect": "https://api.bungendorerfs.org/mapbox-token",
-      "statusCode": 308
+      "statusCode": 302
     },
     {
       "route": "/api/*",
       "redirect": "https://api.bungendorerfs.org/api/*",
-      "statusCode": 308
+      "statusCode": 302
     }
   ]
 }
