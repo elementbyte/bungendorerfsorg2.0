@@ -3,20 +3,38 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+const allowedOrigins = [
+  "https://bungendorerfs.org",
+  "https://www.bungendorerfs.org",
+  "http://localhost:3000",
+  "https://lively-flower-0577f4700-livedev.eastasia.5.azurestaticapps.net"
+];
+
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Basic CORS handling for API requests when routed via redirects
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.set("Access-Control-Allow-Origin", origin);
+    res.set("Vary", "Origin");
+  }
+  res.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type, X-Request-ID");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
 
 // Endpoint to get the Mapbox token with origin validation
 app.get("/mapbox-token", (req, res) => {
-  const allowedOrigins = [
-    "https://www.bungendorerfs.org",
-    "http://localhost:3000",
-    "https://lively-flower-0577f4700-livedev.eastasia.5.azurestaticapps.net"
-  ];
-  
   let origin = req.headers.origin;
   
   // If no origin header, try to extract from referer

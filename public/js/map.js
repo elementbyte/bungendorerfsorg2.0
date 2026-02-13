@@ -6,7 +6,7 @@ function initMap() {
   });
 
   // Fetch the Mapbox token from the backend API
-  fetch("/mapbox-token")
+  fetch(`${getApiBaseUrl()}/mapbox-token`)
     .then((response) => response.json())
     .then((data) => {
       const accessToken = data.token;
@@ -80,7 +80,7 @@ function initMap() {
       const markers = L.featureGroup().addTo(map);
 
       // Fetch GeoJSON data and add markers to the map
-      const targetUrl = "/api/fire-incidents";
+      const targetUrl = `${getApiBaseUrl()}/api/fire-incidents`;
 
       fetch(targetUrl, {
         method: "GET",

@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Fetch events data from the URL
-  fetch("/api/calendar-events")
+  fetch(`${getApiBaseUrl()}/api/calendar-events`)
     .then((response) => response.json())
     .then((data) => {
       const events = Array.isArray(data?.value) ? data.value : [];

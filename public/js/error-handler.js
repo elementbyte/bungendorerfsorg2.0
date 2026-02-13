@@ -118,3 +118,16 @@ function getUserFriendlyErrorMessage(error) {
     return "An unexpected error occurred. Please try again.";
   }
 }
+
+/**
+ * Get the API base URL based on the current hostname.
+ * Uses the dedicated API host in production and relative paths in dev.
+ * @returns {string}
+ */
+function getApiBaseUrl() {
+  const hostname = window.location.hostname;
+  if (hostname === "bungendorerfs.org" || hostname === "www.bungendorerfs.org") {
+    return "https://api.bungendorerfs.org";
+  }
+  return "";
+}

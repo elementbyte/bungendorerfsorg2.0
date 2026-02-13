@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("/Content/AFDRSMessages.json")
       .then((response) => response.json())
       .then((fireDangerRatings) => {
-        fetch("/api/fire-danger")
+        fetch(`${getApiBaseUrl()}/api/fire-danger`)
           .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to fetch fire danger data");
