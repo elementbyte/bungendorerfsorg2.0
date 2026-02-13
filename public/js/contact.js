@@ -52,14 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const originalButtonText = submitButton.innerHTML;
     submitButton.innerHTML = "<span aria-busy=\"true\"></span>";
 
-    fetch("/api/contact", {
+    fetch(`${getApiBaseUrl()}/api/contact`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }
-    )
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -91,10 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => {
         console.error("Error:", error);
         const errorMessage = getUserFriendlyErrorMessage(error);
-        
+
         // Show error message to user
         showModal("Submission Failed", errorMessage);
-        
+
         // Restore the original submit button text in case of error
         submitButton.innerHTML = originalButtonText;
         submitButton.disabled = false;
@@ -136,7 +135,7 @@ function validateContactForm(data) {
     // Examples: 0412345678, +61412345678, (02) 1234 5678, 02-1234-5678
     const phonePattern = /^(\+?61|0)[2-478](?:[ -]?[0-9]){8}$/;
     const cleanPhone = data.phone.replace(/[\s()-]/g, ""); // Remove spaces, hyphens, parentheses
-    
+
     if (!phonePattern.test(cleanPhone)) {
       errors.push("Please enter a valid Australian phone number.");
     }

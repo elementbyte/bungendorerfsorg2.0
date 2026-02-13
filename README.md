@@ -64,29 +64,34 @@ This project is a website for the Bungendore Volunteer Rural Fire Brigade. It pr
 ## Installation and Setup
 
 ### Prerequisites
+
 - Node.js >= 18.0.0
 - npm (comes with Node.js)
 
 ### Quick Start
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/richardthorek/bungendorerfsorg2.0.git
    cd bungendorerfsorg2.0
    ```
 
 2. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 3. **Configure environment variables**:
+
    ```bash
    cp .env.example .env
    # Edit .env and add your credentials (see Environment Configuration below)
    ```
 
 4. **Start the server**:
+
    ```bash
    npm start
    ```
@@ -146,11 +151,13 @@ npm run format:check
 ### Testing
 
 The project uses Jest for testing:
+
 - **Unit Tests**: Test individual functions and utilities
 - **Integration Tests**: Test API endpoints and data flows (planned)
 - **Current Coverage**: 29 tests passing, 92%+ coverage on utilities
 
 Run tests with:
+
 ```bash
 npm test
 ```
@@ -242,6 +249,7 @@ See `Documentation/API_INTEGRATION.md` for complete API documentation.
 ## Dark Mode Support
 
 Automatically switches based on user's system preference:
+
 - Logo: `logo.png` ↔ `logo-dark.png`
 - Map tiles: Day mode ↔ Night mode
 - CSS variables: Light theme ↔ Dark theme
@@ -249,6 +257,7 @@ Automatically switches based on user's system preference:
 ## Recent Improvements (2026)
 
 ### Security Fixes ✅
+
 - Removed token logging from server
 - Added XSS protection with DOMPurify sanitization
 - Moved Azure Logic Apps URLs to backend proxy
@@ -256,23 +265,27 @@ Automatically switches based on user's system preference:
 - Implemented honeypot spam prevention
 
 ### Error Handling & Validation ✅
+
 - User-visible error messages for all API failures
 - Shared error handler utility
 - Comprehensive form validation (client & server)
 - Loading states for async operations
 
 ### Testing & CI/CD ✅
+
 - Jest testing framework with 29 passing tests
 - ESLint and Prettier for code quality
 - Automated CI/CD with GitHub Actions
 - Security auditing in CI pipeline
 
 ### Documentation ✅
+
 - API Integration guide (10KB)
 - Testing guide (11KB)
 - Environment configuration examples
 
 ### Asset & CSS Optimization (2024)
+
 - Removed 45 duplicate/unused images
 - Reduced CSS by 37 lines
 - Consolidated favicon files
@@ -281,6 +294,7 @@ Automatically switches based on user's system preference:
 ## CI/CD Pipeline
 
 Automated workflows run on every push and PR:
+
 - ✅ ESLint code linting
 - ✅ Prettier formatting checks
 - ✅ Jest test suite (29 tests)
@@ -293,11 +307,13 @@ See `.github/workflows/ci.yml` for configuration.
 ## Contributing and Development Process
 
 ### Branch Strategy
+
 - **main**: Protected branch, production deployment
 - **liveDev**: Integration branch with staging URL
 - **Feature branches**: Individual features/fixes with PR to liveDev
 
 ### Development Workflow
+
 1. Create feature branch from `liveDev`
 2. Develop and test locally
 3. Run tests and linting: `npm test && npm run lint`
@@ -305,6 +321,7 @@ See `.github/workflows/ci.yml` for configuration.
 5. After review and testing on liveDev URL, owner merges to `main`
 
 ### Code Review Requirements
+
 - All tests passing
 - No ESLint errors
 - No security vulnerabilities
@@ -313,6 +330,7 @@ See `.github/workflows/ci.yml` for configuration.
 ## Documentation
 
 Additional documentation in `/Documentation/`:
+
 - **API_INTEGRATION.md** - Complete API integration guide
 - **TESTING.md** - Testing guide and best practices
 - **ASSET_ORGANIZATION.md** - Image and icon asset guide
@@ -325,21 +343,25 @@ Additional documentation in `/Documentation/`:
 ### Common Issues
 
 **Server won't start:**
+
 - Check `.env` file exists and has all required variables
 - Verify Node.js version >= 18.0.0: `node --version`
 - Try: `rm -rf node_modules && npm install`
 
 **Map not loading:**
+
 - Verify `MAPBOX_ACCESS_TOKEN` in `.env`
 - Check browser console for errors
 - Verify token hasn't been revoked in Mapbox account
 
 **Form submission fails:**
+
 - Check `AZURE_CONTACT_WEBHOOK_URL` in `.env`
 - Verify Azure Logic App is running
 - Check server logs for errors
 
 **Tests failing:**
+
 - Clear Jest cache: `npm test -- --clearCache`
 - Reinstall dependencies: `rm -rf node_modules && npm install`
 
@@ -348,12 +370,14 @@ See `Documentation/API_INTEGRATION.md` for more troubleshooting.
 ## Performance
 
 ### Optimizations Applied
+
 - Consolidated image assets
 - Optimized CSS (reduced file size)
 - Server-side caching for static assets
 - Efficient API proxy endpoints
 
 ### Future Improvements
+
 - Image lazy loading
 - Service worker for offline capability
 - Further CSS optimization
@@ -362,6 +386,7 @@ See `Documentation/API_INTEGRATION.md` for more troubleshooting.
 ## Accessibility
 
 ### Current Features
+
 - Semantic HTML5 elements
 - ARIA labels and roles
 - Keyboard navigation support
@@ -369,6 +394,7 @@ See `Documentation/API_INTEGRATION.md` for more troubleshooting.
 - Form validation feedback
 
 ### Future Improvements
+
 - Full accessibility audit
 - Enhanced keyboard navigation
 - Additional ARIA attributes
@@ -381,6 +407,7 @@ This project is for the Bungendore Volunteer Rural Fire Brigade community use.
 ## Contact
 
 For issues or questions:
+
 - Open a GitHub issue
 - Contact repository owner: @richardthorek
 
@@ -389,4 +416,3 @@ For issues or questions:
 **Last Updated:** February 2026  
 **Version:** 1.0  
 **Maintained By:** Bungendore RFS Development Team
-

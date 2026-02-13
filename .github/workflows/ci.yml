@@ -34,14 +34,9 @@ jobs:
         
       - name: Run ESLint
         run: npm run lint
-        continue-on-error: true
         
       - name: Run Prettier check
         run: npm run format:check
-        continue-on-error: true
-        
-      - name: Run tests
-        run: npm test
         
       - name: Run tests with coverage
         run: npm run test:coverage
@@ -55,7 +50,6 @@ jobs:
           
       - name: Security audit
         run: npm audit --production
-        continue-on-error: true
         
       - name: Check for outdated dependencies
         run: npm outdated || true

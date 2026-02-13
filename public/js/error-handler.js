@@ -1,3 +1,4 @@
+/* exported showErrorMessage, showLoadingMessage, fetchWithErrorHandling, getUserFriendlyErrorMessage, getApiBaseUrl */
 /**
  * Shared error handling utilities for frontend fetch calls
  * Provides consistent user feedback for API and network failures
@@ -131,3 +132,9 @@ function getApiBaseUrl() {
   }
   return "";
 }
+
+window.showErrorMessage = showErrorMessage;
+window.showLoadingMessage = showLoadingMessage;
+window.fetchWithErrorHandling = fetchWithErrorHandling;
+window.getUserFriendlyErrorMessage = getUserFriendlyErrorMessage;
+window.getApiBaseUrl = getApiBaseUrl;

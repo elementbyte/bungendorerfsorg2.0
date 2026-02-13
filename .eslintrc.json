@@ -18,6 +18,7 @@
     "showErrorMessage": "readonly",
     "showLoadingMessage": "readonly",
     "getUserFriendlyErrorMessage": "readonly",
+    "getApiBaseUrl": "readonly",
     "fetchWithErrorHandling": "readonly",
     "populateFireInfoTable": "readonly",
     "extractFields": "readonly",

@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const membershipCalendar = document.getElementById("membershipCalendar");
   const communityEventsCalendar = document.getElementById("communityEventsCalendar");
   const modal = document.getElementById("eventModal");
-  const modalContent = document.getElementById("modalEventContent");
   const closeButton = document.getElementById("eventModalClose");
 
   // Show loading state
@@ -20,14 +19,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const events = Array.isArray(data?.value) ? data.value : [];
 
       // Filter and display Membership events
-      const membershipEvents = events.filter((event) =>
-        Array.isArray(event.categories) && event.categories.includes("Public - Training")
+      const membershipEvents = events.filter(
+        (event) => Array.isArray(event.categories) && event.categories.includes("Public - Training")
       );
       displayEvents(membershipEvents, membershipCalendar);
 
       // Filter and display Community Events
-      const communityEvents = events.filter((event) =>
-        Array.isArray(event.categories) && event.categories.includes("Public - Community Engagement")
+      const communityEvents = events.filter(
+        (event) =>
+          Array.isArray(event.categories) &&
+          event.categories.includes("Public - Community Engagement")
       );
       displayEvents(communityEvents, communityEventsCalendar);
     })
@@ -67,8 +68,12 @@ function displayEvents(events, container) {
     titleElement.style.cursor = "pointer";
 
     // Convert start and end times to Bungendore, NSW, Australia time zone
-    const startDate = luxon.DateTime.fromISO(event.start.dateTime || event.start, { zone: "utc" }).setZone("Australia/Sydney");
-    const endDate = luxon.DateTime.fromISO(event.end.dateTime || event.end, { zone: "utc" }).setZone("Australia/Sydney");
+    const startDate = luxon.DateTime.fromISO(event.start.dateTime || event.start, {
+      zone: "utc",
+    }).setZone("Australia/Sydney");
+    const endDate = luxon.DateTime.fromISO(event.end.dateTime || event.end, {
+      zone: "utc",
+    }).setZone("Australia/Sydney");
 
     const dateTimeElement = document.createElement("div");
     dateTimeElement.className = "event-date-time";

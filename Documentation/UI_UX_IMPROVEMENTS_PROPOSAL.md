@@ -14,6 +14,7 @@ After a thorough review of the current Bungendore Volunteer Rural Fire Brigade w
 ## Current State Analysis
 
 ### Strengths
+
 - ✅ Functional emergency fire information with real-time data
 - ✅ Interactive Leaflet map showing fire incidents
 - ✅ Responsive design with dark mode support
@@ -21,6 +22,7 @@ After a thorough review of the current Bungendore Volunteer Rural Fire Brigade w
 - ✅ Rich content about preparation, membership, and events
 
 ### Areas for Improvement
+
 - ⚠️ **Information Architecture**: Single long-scroll page makes navigation difficult; critical information buried below fold
 - ⚠️ **Visual Hierarchy**: Similar treatment of all content sections reduces emphasis on emergency information
 - ⚠️ **Mobile Experience**: Navigation compressed and summary cards hidden on mobile
@@ -34,7 +36,9 @@ After a thorough review of the current Bungendore Volunteer Rural Fire Brigade w
 ### Priority: HIGH (Safety Critical)
 
 ### Problem Statement
+
 Currently, fire danger ratings and incident information are presented in a summary card that:
+
 - Appears below the hero section (requires scrolling)
 - Has equal visual weight to non-emergency sections (Membership, Events)
 - Is hidden entirely on mobile devices (< 770px)
@@ -43,11 +47,13 @@ Currently, fire danger ratings and incident information are presented in a summa
 **Impact**: Users may miss critical emergency information, especially on mobile devices where the Fire Information card is completely hidden.
 
 ### Proposed Solution
+
 Implement a **persistent emergency status bar** that provides at-a-glance critical information at all times.
 
 #### Component Design
 
 **Desktop Implementation:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ [Logo] Navigation Links...            [Emergency Bar]   │
@@ -60,6 +66,7 @@ Implement a **persistent emergency status bar** that provides at-a-glance critic
 ```
 
 **Mobile Implementation:**
+
 ```
 ┌────────────────────────────┐
 │  [≡] Bungendore RFS  [🔥]  │  ← Fire icon badge indicator
@@ -93,23 +100,27 @@ Implement a **persistent emergency status bar** that provides at-a-glance critic
 #### Technical Implementation
 
 **CSS Changes:**
+
 - New `.emergency-status-bar` component
 - Sticky positioning integrated with existing `#siteHeader`
 - Responsive breakpoints for mobile badge
 - CSS animations for attention-getting (used sparingly)
 
 **JavaScript Changes:**
+
 - Modify existing fire danger fetching to update status bar
 - Add toggle functionality for mobile emergency panel
 - Add persistent state (localStorage) for user preferences
 
 **HTML Changes:**
+
 - New emergency status component in header
 - Mobile-specific emergency panel markup
 
 ### Visual References
 
 **Best-in-class examples:**
+
 - **ABC Emergency**: Uses persistent red alert bar for active emergencies
 - **Fires Near Me NSW**: Prominent location-based alert system at top
 - **UK Met Office**: Color-coded weather warnings in header
@@ -123,6 +134,7 @@ Implement a **persistent emergency status bar** that provides at-a-glance critic
 ✅ **User Confidence**: Always-visible status reduces anxiety and uncertainty
 
 ### Implementation Effort
+
 - **Design**: 4 hours (wireframes, mobile/desktop variants)
 - **Development**: 12-16 hours (CSS, JS, testing)
 - **Testing**: 4 hours (cross-browser, mobile devices)
@@ -135,7 +147,9 @@ Implement a **persistent emergency status bar** that provides at-a-glance critic
 ### Priority: HIGH (Usability)
 
 ### Problem Statement
+
 The current single-page layout creates several usability issues:
+
 - **Overwhelming scroll**: Users must scroll through 4 major sections to find specific information
 - **No quick navigation**: Hash links in header are the only navigation method
 - **Lost context**: Users lose track of where they are on long pages
@@ -143,11 +157,13 @@ The current single-page layout creates several usability issues:
 - **Content discoverability**: Good content (calendar, interactive maps) buried deep in page
 
 ### Proposed Solution
+
 Implement a **tabbed interface for main content sections** with progressive disclosure for detailed information.
 
 #### Component Design
 
 **Desktop Implementation:**
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                     HERO SECTION                         │
@@ -164,6 +180,7 @@ Implement a **tabbed interface for main content sections** with progressive disc
 ```
 
 **Mobile Implementation:**
+
 ```
 ┌────────────────────────────┐
 │    HERO SECTION            │
@@ -205,6 +222,7 @@ Implement a **tabbed interface for main content sections** with progressive disc
 #### Detailed Tab Structure
 
 **Tab 1: Fire Information** 🔥
+
 - Fire Danger Rating (prominent display)
 - Live Incident Map (full-width)
 - Current Incidents List (table/cards)
@@ -212,6 +230,7 @@ Implement a **tabbed interface for main content sections** with progressive disc
 - Quick Links: "Check My Area" | "Report Fire" | "Emergency Plan"
 
 **Tab 2: Prepare** 🛡️
+
 - Bushfire Readiness Checklist
 - Create Fire Plan (link to My Fire Plan)
 - Permits & Notifications
@@ -219,6 +238,7 @@ Implement a **tabbed interface for main content sections** with progressive disc
 - Download Resources (PDFs, guides)
 
 **Tab 3: Membership** 👥
+
 - Join the Brigade (call-to-action)
 - Volunteer Roles
 - Training Calendar Widget
@@ -226,6 +246,7 @@ Implement a **tabbed interface for main content sections** with progressive disc
 - FAQs
 
 **Tab 4: Events** 📅
+
 - Upcoming Community Events Calendar
 - Past Event Gallery
 - Fundraising Initiatives
@@ -235,15 +256,14 @@ Implement a **tabbed interface for main content sections** with progressive disc
 #### Technical Implementation
 
 **HTML Structure:**
+
 ```html
 <div class="content-tabs-container">
   <div class="tab-navigation" role="tablist">
     <button role="tab" aria-selected="true" data-tab="fire-info">
       <i class="fas fa-fire"></i> Fire Information
     </button>
-    <button role="tab" data-tab="prepare">
-      <i class="fas fa-shield-alt"></i> Prepare
-    </button>
+    <button role="tab" data-tab="prepare"><i class="fas fa-shield-alt"></i> Prepare</button>
     <!-- More tabs -->
   </div>
 
@@ -257,12 +277,14 @@ Implement a **tabbed interface for main content sections** with progressive disc
 ```
 
 **CSS Approach:**
+
 - CSS Grid/Flexbox for tab layout
 - CSS transitions for smooth content switching
 - Accessibility: Focus indicators, ARIA attributes
 - Responsive: Transform tabs to accordion on mobile breakpoint
 
 **JavaScript:**
+
 - Tab switching logic (show/hide panels)
 - URL hash management for deep linking
 - Accordion expand/collapse for mobile
@@ -272,6 +294,7 @@ Implement a **tabbed interface for main content sections** with progressive disc
 ### Visual References
 
 **Best-in-class examples:**
+
 - **Gov.uk**: Excellent use of tabs for complex information
 - **NHS Website**: Clear tabbed navigation for medical content
 - **Australian Red Cross**: Mobile accordion patterns for service information
@@ -287,6 +310,7 @@ Implement a **tabbed interface for main content sections** with progressive disc
 ✅ **Analytics**: Track which sections users visit most
 
 ### Implementation Effort
+
 - **Design**: 8 hours (wireframes, interaction design, accessibility review)
 - **Development**: 24-32 hours (HTML restructure, CSS, JS, URL routing)
 - **Content Migration**: 8 hours (reorganize existing content into tabs)
@@ -300,7 +324,9 @@ Implement a **tabbed interface for main content sections** with progressive disc
 ### Priority: MEDIUM-HIGH (Professional Polish)
 
 ### Problem Statement
+
 While the site uses good brand colors and has a solid foundation, several visual design issues reduce professional appearance:
+
 - **Inconsistent spacing**: Variable margins and padding reduce polish
 - **Limited visual hierarchy**: All cards look similar (fire emergency vs. community events)
 - **Dense text blocks**: Long paragraphs without visual breaks
@@ -310,6 +336,7 @@ While the site uses good brand colors and has a solid foundation, several visual
 - **Limited imagery**: Rich content (fire preparation, events) lacks supporting visuals
 
 ### Proposed Solution
+
 Implement a **modernized, card-based design system** with consistent spacing, better visual hierarchy, and strategic use of imagery.
 
 #### Component Design Elements
@@ -317,6 +344,7 @@ Implement a **modernized, card-based design system** with consistent spacing, be
 **1. Enhanced Card System**
 
 **Current Card:**
+
 ```
 ┌──────────────────────────┐
 │ [COLORED HEADER]         │
@@ -327,6 +355,7 @@ Implement a **modernized, card-based design system** with consistent spacing, be
 ```
 
 **Proposed Enhanced Cards:**
+
 ```
 ┌──────────────────────────────────┐
 │  🔥 [Category Badge]              │
@@ -340,6 +369,7 @@ Implement a **modernized, card-based design system** with consistent spacing, be
 ```
 
 **Features:**
+
 - **Visual distinction**: Icon/image thumbnails for immediate recognition
 - **Hierarchy**: Larger typography for titles, muted text for descriptions
 - **Call-to-action**: Clear buttons or links (not just header links)
@@ -349,12 +379,14 @@ Implement a **modernized, card-based design system** with consistent spacing, be
 **2. Improved Hero Section**
 
 **Current Hero Issues:**
+
 - Takes up nearly full viewport on desktop
 - Semi-transparent text banner reduces image impact
 - Button cluster feels cramped
 - Doesn't preview content below
 
 **Proposed Hero:**
+
 ```
 ┌─────────────────────────────────────────────────────┐
 │                                                      │
@@ -371,6 +403,7 @@ Implement a **modernized, card-based design system** with consistent spacing, be
 ```
 
 **Improvements:**
+
 - **Reduced height**: 60vh on desktop (shows content below fold)
 - **Clearer CTAs**: Primary action more prominent, secondary actions de-emphasized
 - **Better text contrast**: Solid color overlay or text shadow for readability
@@ -379,6 +412,7 @@ Implement a **modernized, card-based design system** with consistent spacing, be
 **3. Typography & Spacing Refinements**
 
 **Typography Scale:**
+
 ```css
 /* Current: Inconsistent sizes */
 h1: 2.8rem
@@ -395,15 +429,12 @@ Small: 0.875rem (14px)
 ```
 
 **Spacing System Enhancement:**
+
 ```css
 /* Add intermediate spacing values */
---space-xs: 0.25rem (4px)
---space-sm: 0.5rem (8px)
---space-md: 1rem (16px)      ← Standard
---space-lg: 1.5rem (24px)
---space-xl: 2rem (32px)
---space-xxl: 3rem (48px)
---space-xxxl: 4rem (64px)    ← NEW: Section spacing
+--space-xs: 0.25rem (4px) --space-sm: 0.5rem (8px) --space-md: 1rem (16px) ← Standard
+  --space-lg: 1.5rem (24px) --space-xl: 2rem (32px) --space-xxl: 3rem (48px) --space-xxxl: 4rem
+  (64px) ← NEW: Section spacing;
 ```
 
 **4. Content Imagery Integration**
@@ -411,6 +442,7 @@ Small: 0.875rem (14px)
 **Current State**: Few images, mostly in parallax containers
 
 **Proposed Additions:**
+
 - **Hero gallery**: Rotating background images from brigade activities
 - **Card thumbnails**: Small images for Events, Membership
 - **Icon system**: Consistent iconography for actions (Download, Share, Learn More)
@@ -420,16 +452,19 @@ Small: 0.875rem (14px)
 **5. Micro-interactions & Polish**
 
 **Hover States:**
+
 - Cards: Subtle lift (translateY: -4px) + shadow increase
 - Buttons: Background color shift + slight scale
 - Links: Underline animation (slide in from left)
 
 **Loading States:**
+
 - Skeleton screens while fetching fire data
 - Spinner for map loading
 - Progressive image loading (blur-up technique)
 
 **Transitions:**
+
 - Smooth 200-300ms easing for state changes
 - Page scroll smoothing (already implemented)
 - Tab switching with fade/slide animations
@@ -445,6 +480,7 @@ Small: 0.875rem (14px)
 #### Technical Implementation
 
 **CSS Changes:**
+
 ```css
 /* New card component system */
 .card-enhanced {
@@ -457,7 +493,7 @@ Small: 0.875rem (14px)
 
 .card-enhanced:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
 .card-thumbnail {
@@ -478,6 +514,7 @@ Small: 0.875rem (14px)
 ```
 
 **Hero Optimization:**
+
 ```css
 .hero {
   height: 60vh; /* Reduced from 100vh-55px */
@@ -501,6 +538,7 @@ Small: 0.875rem (14px)
 ```
 
 **JavaScript Additions:**
+
 - Image lazy loading
 - Skeleton screen rendering
 - Hero carousel/slideshow (optional)
@@ -508,6 +546,7 @@ Small: 0.875rem (14px)
 #### Visual References
 
 **Best-in-class examples:**
+
 - **Stripe**: Excellent card design with subtle interactions
 - **Airbnb**: Card-based content discovery
 - **Material Design (Google)**: Card elevation and hover states
@@ -525,6 +564,7 @@ Small: 0.875rem (14px)
 ✅ **Faster Comprehension**: Visual cues (icons, images) aid understanding
 
 ### Implementation Effort
+
 - **Design System**: 16 hours (define components, spacing, typography)
 - **Component Development**: 24-32 hours (CSS, HTML updates)
 - **Image Sourcing/Optimization**: 8 hours (gather, resize, optimize images)
@@ -538,14 +578,17 @@ Small: 0.875rem (14px)
 ## Implementation Roadmap
 
 ### Phase 1: Emergency Dashboard (Highest Priority)
+
 **Timeline**: 2-3 weeks
 **Rationale**: Safety-critical feature that immediately improves user experience
 
 ### Phase 2: Content Navigation Restructure
+
 **Timeline**: 4-6 weeks
 **Rationale**: Significant architectural change requiring content reorganization
 
 ### Phase 3: Visual Design System
+
 **Timeline**: 6-8 weeks
 **Rationale**: Polish and refinement, can be iterative
 
@@ -556,6 +599,7 @@ Small: 0.875rem (14px)
 ## Success Metrics
 
 ### Quantitative Metrics
+
 1. **Task Completion Time**: Time to find fire danger rating (target: < 5 seconds on all devices)
 2. **Bounce Rate**: Reduce bounce rate by 20% through better navigation
 3. **Page Depth**: Increase average pages per session by 30%
@@ -563,6 +607,7 @@ Small: 0.875rem (14px)
 5. **Click-Through Rate**: Increase CTA clicks (Membership, Events) by 25%
 
 ### Qualitative Metrics
+
 1. **User Satisfaction**: Survey users on ease of finding information
 2. **Professional Perception**: Rate "trust" and "professionalism" before/after
 3. **Accessibility Feedback**: Test with users who rely on assistive technologies
@@ -573,22 +618,27 @@ Small: 0.875rem (14px)
 ## Potential Blockers & Mitigation
 
 ### Technical Limitations
+
 **Issue**: Single-page architecture may limit some interactions
 **Mitigation**: Progressive enhancement; JavaScript features degrade gracefully
 
 ### Content Volume
+
 **Issue**: Large amounts of content may be difficult to restructure
 **Mitigation**: Phased migration; start with Fire Info tab
 
 ### Browser Compatibility
+
 **Issue**: Older browsers may not support all CSS features
 **Mitigation**: Use feature detection; provide fallbacks
 
 ### Resource Constraints
+
 **Issue**: Development time and budget limitations
 **Mitigation**: Prioritize Phase 1, implement Phases 2-3 as resources allow
 
 ### User Adaptation
+
 **Issue**: Existing users familiar with current layout
 **Mitigation**: Soft launch to subset of users; gather feedback; iterate
 
@@ -597,16 +647,19 @@ Small: 0.875rem (14px)
 ## Alternatives Considered
 
 ### Alternative 1: Multi-Page Architecture
+
 **Pros**: Cleaner URLs, easier analytics, better SEO
 **Cons**: More complex navigation, slower page loads, higher maintenance
 **Decision**: Rejected due to current single-page benefits (smooth scrolling, faster perceived performance)
 
 ### Alternative 2: Modal-Based Navigation
+
 **Pros**: Keeps single page, modern interaction pattern
 **Cons**: Can frustrate users, accessibility concerns, no URL routing
 **Decision**: Rejected in favor of tabs/accordion which are more accessible
 
 ### Alternative 3: Dashboard-Style Layout
+
 **Pros**: Maximize information density, widget-based flexibility
 **Cons**: Too complex for general public, maintenance overhead
 **Decision**: Rejected; better for internal/admin tools than public site
@@ -620,18 +673,21 @@ These three major improvements—**Emergency Dashboard**, **Tabbed Navigation**,
 ### Key Benefits Summary
 
 **For Users:**
+
 - ✅ Critical emergency information always accessible
 - ✅ Faster navigation to relevant content
 - ✅ More engaging and easier to understand
 - ✅ Better mobile experience
 
 **For the Brigade:**
+
 - ✅ Professional, trustworthy online presence
 - ✅ Better member recruitment through improved content
 - ✅ Increased community engagement
 - ✅ Easier content management
 
 **For the Community:**
+
 - ✅ Improved fire safety awareness
 - ✅ Better access to preparation resources
 - ✅ Stronger connection to local brigade
@@ -650,6 +706,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ### A. Emergency Dashboard Wireframes
 
 **Desktop Condensed State:**
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ [Logo] Fire Info | Prepare | Membership | Events  │ 🔥 MODERATE │
@@ -658,6 +715,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ```
 
 **Desktop Expanded State:**
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ [Logo] Fire Info | Prepare | Membership | Events               │
@@ -671,6 +729,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ```
 
 **Mobile Badge & Panel:**
+
 ```
 ┌──────────────────────────┐
 │  [≡] Bungendore RFS [🔥2]│
@@ -696,6 +755,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ### B. Tab Navigation Wireframes
 
 **Desktop Tabs:**
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         HERO SECTION                             │
@@ -721,6 +781,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ```
 
 **Mobile Accordion:**
+
 ```
 ┌────────────────────────┐
 │   HERO (CONDENSED)     │
@@ -747,6 +808,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ### C. Enhanced Card Examples
 
 **Standard Content Card:**
+
 ```
 ┌──────────────────────────────────┐
 │ 🛡️ PREPARE                       │
@@ -764,6 +826,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ```
 
 **Urgent Information Card:**
+
 ```
 ┌──────────────────────────────────┐
 │ 🚨 EMERGENCY WARNING              │
@@ -778,6 +841,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ```
 
 **Event Card:**
+
 ```
 ┌──────────────────────────────────┐
 │ ┌──────────────────────────────┐│
@@ -797,6 +861,7 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 ## References & Research
 
 ### Best-Practice Resources
+
 1. **NSW RFS Style Guide** (Sept 2024) - Brand compliance
 2. **Web Content Accessibility Guidelines (WCAG 2.1)** - Accessibility standards
 3. **Australian Government Design System** - Government website patterns
@@ -804,12 +869,14 @@ This approach balances impact, effort, and risk while allowing for iterative ref
 5. **Nielsen Norman Group** - Emergency information display research
 
 ### Competitor Analysis
+
 - **Fires Near Me NSW**: Mobile app patterns
 - **ABC Emergency**: Real-time alert presentation
 - **CFA Victoria**: Community engagement features
 - **Rural Fire Service QLD**: Content organization
 
 ### User Research Resources
+
 - Community survey data (if available)
 - Analytics data (if available)
 - Accessibility audit reports

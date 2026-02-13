@@ -1,18 +1,20 @@
 name: Deploy BungendoreRFS.org Website to Azure
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI - Lint, Test, and Security"]
+    types: [completed]
     branches:
       - main
       - liveDev
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [closed]
     branches:
       - main
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:

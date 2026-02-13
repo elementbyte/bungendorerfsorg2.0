@@ -5,6 +5,7 @@ This document describes the testing infrastructure and practices for the Bungend
 ---
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Testing Stack](#testing-stack)
 - [Running Tests](#running-tests)
@@ -20,12 +21,14 @@ This document describes the testing infrastructure and practices for the Bungend
 The project uses **Jest** as the testing framework with **@testing-library** utilities for DOM testing.
 
 **Current Test Coverage:**
+
 - ✅ Error handler utilities
 - ✅ Form validation (client and server)
 - 🔄 Integration tests (planned)
 - 🔄 E2E tests (planned)
 
 **Test Philosophy:**
+
 - Test behavior, not implementation
 - Focus on user-facing functionality
 - Maintain fast test execution
@@ -49,20 +52,14 @@ The project uses **Jest** as the testing framework with **@testing-library** uti
 ### Configuration
 
 **`jest.config.js`:**
+
 ```javascript
 module.exports = {
   testEnvironment: "jsdom",
-  testMatch: [
-    "**/__tests__/**/*.js",
-    "**/?(*.)+(spec|test).js"
-  ],
+  testMatch: ["**/__tests__/**/*.js", "**/?(*.)+(spec|test).js"],
   coverageDirectory: "coverage",
-  collectCoverageFrom: [
-    "public/js/**/*.js",
-    "server.js",
-    "!public/js/**/*.test.js"
-  ],
-  setupFilesAfterEnv: ["@testing-library/jest-dom"]
+  collectCoverageFrom: ["public/js/**/*.js", "server.js", "!public/js/**/*.test.js"],
+  setupFilesAfterEnv: ["@testing-library/jest-dom"],
 };
 ```
 
@@ -92,6 +89,7 @@ npm test -- --testNamePattern="validation"
 ### Output Examples
 
 **Successful test run:**
+
 ```
 PASS  __tests__/validation.test.js
 PASS  __tests__/error-handler.test.js
@@ -103,6 +101,7 @@ Time:        1.017 s
 ```
 
 **Coverage report:**
+
 ```
 ----------------------|---------|----------|---------|---------|
 File                  | % Stmts | % Branch | % Funcs | % Lines |
@@ -135,10 +134,10 @@ describe("Feature Name", () => {
     test("should do something specific", () => {
       // Arrange: Set up test data
       const input = "test data";
-      
+
       // Act: Execute the function
       const result = functionUnderTest(input);
-      
+
       // Assert: Verify the result
       expect(result).toBe(expected);
     });
@@ -154,14 +153,14 @@ describe("getUserFriendlyErrorMessage", () => {
   test("should return connection error for fetch failures", () => {
     const error = new Error("Failed to fetch");
     const message = getUserFriendlyErrorMessage(error);
-    
+
     expect(message).toContain("check your internet connection");
   });
 
   test("should return not found for 404 errors", () => {
     const error = new Error("HTTP error! status: 404");
     const message = getUserFriendlyErrorMessage(error);
-    
+
     expect(message).toContain("could not be found");
   });
 });
@@ -178,7 +177,7 @@ describe("showErrorMessage", () => {
 
   test("should display error in container", () => {
     showErrorMessage("container", "Test error");
-    
+
     const container = document.getElementById("container");
     expect(container.innerHTML).toContain("Test error");
     expect(container.innerHTML).toContain("error-banner");
@@ -195,11 +194,11 @@ describe("validateContactForm", () => {
     const data = {
       name: "John Doe",
       email: "invalid-email",
-      message: "Test message"
+      message: "Test message",
     };
-    
+
     const errors = validateContactForm(data);
-    
+
     expect(errors).toContain("Please enter a valid email address");
   });
 
@@ -207,11 +206,11 @@ describe("validateContactForm", () => {
     const data = {
       name: "John Doe",
       email: "john@example.com",
-      message: "This is a valid message"
+      message: "This is a valid message",
     };
-    
+
     const errors = validateContactForm(data);
-    
+
     expect(errors.length).toBe(0);
   });
 });
@@ -231,16 +230,17 @@ After running `npm run test:coverage`:
 
 ### Coverage Targets
 
-| Component | Target | Current |
-|-----------|--------|---------|
-| Utilities | 90%    | 92%     |
-| Validation | 90%   | 85%     |
-| Server | 70%     | 60%     |
-| Overall | 80%    | 75%     |
+| Component  | Target | Current |
+| ---------- | ------ | ------- |
+| Utilities  | 90%    | 92%     |
+| Validation | 90%    | 85%     |
+| Server     | 70%    | 60%     |
+| Overall    | 80%    | 75%     |
 
 ### What to Test
 
 **High Priority:**
+
 - ✅ Form validation logic
 - ✅ Error handling utilities
 - ✅ Data transformation functions
@@ -248,6 +248,7 @@ After running `npm run test:coverage`:
 - 🔄 User interactions
 
 **Lower Priority:**
+
 - UI styling (manual testing)
 - Third-party library functionality
 - Simple getters/setters
@@ -259,17 +260,19 @@ After running `npm run test:coverage`:
 ### GitHub Actions Workflow
 
 Tests run automatically on:
+
 - Every push to `main`, `liveDev`, `copilot/**` branches
 - Every pull request to `main` or `liveDev`
 
 **`.github/workflows/ci.yml`:**
+
 ```yaml
 - name: Run tests
   run: npm test
-  
+
 - name: Run tests with coverage
   run: npm run test:coverage
-  
+
 - name: Upload coverage reports
   uses: codecov/codecov-action@v4
   with:
@@ -308,6 +311,7 @@ __tests__/
 ### 3. Writing Good Tests
 
 **DO:**
+
 - ✅ Test user-facing behavior
 - ✅ Use descriptive test names
 - ✅ Keep tests independent
@@ -315,6 +319,7 @@ __tests__/
 - ✅ Mock external dependencies
 
 **DON'T:**
+
 - ❌ Test implementation details
 - ❌ Write tests that depend on each other
 - ❌ Make actual API calls in unit tests
@@ -327,10 +332,10 @@ __tests__/
 test("should calculate total correctly", () => {
   // Arrange: Set up test data
   const items = [10, 20, 30];
-  
+
   // Act: Execute the function
   const total = calculateTotal(items);
-  
+
   // Assert: Verify the result
   expect(total).toBe(60);
 });
@@ -344,12 +349,12 @@ test("should fetch data successfully", async () => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
       ok: true,
-      json: () => Promise.resolve({ data: "test" })
+      json: () => Promise.resolve({ data: "test" }),
     })
   );
-  
+
   const result = await fetchData();
-  
+
   expect(result.data).toBe("test");
   expect(fetch).toHaveBeenCalledTimes(1);
 });
@@ -361,11 +366,11 @@ test("should fetch data successfully", async () => {
 beforeEach(() => {
   // Mock DOMPurify
   global.DOMPurify = {
-    sanitize: (html) => html
+    sanitize: (html) => html,
   };
-  
+
   // Mock console methods
-  jest.spyOn(console, 'error').mockImplementation(() => {});
+  jest.spyOn(console, "error").mockImplementation(() => {});
 });
 
 afterEach(() => {
@@ -382,12 +387,10 @@ afterEach(() => {
 
 ```javascript
 test("should handle API errors gracefully", async () => {
-  global.fetch = jest.fn(() => 
-    Promise.reject(new Error("Network error"))
-  );
-  
+  global.fetch = jest.fn(() => Promise.reject(new Error("Network error")));
+
   await expect(fetchData()).rejects.toThrow("Network error");
-  
+
   // Verify error was logged
   expect(console.error).toHaveBeenCalled();
 });
@@ -402,12 +405,12 @@ test("should submit form successfully", async () => {
     <input name="name" value="John Doe">
     <input name="email" value="john@example.com">
   `;
-  
+
   const submitHandler = jest.fn();
   form.addEventListener("submit", submitHandler);
-  
+
   form.dispatchEvent(new Event("submit"));
-  
+
   expect(submitHandler).toHaveBeenCalled();
 });
 ```
@@ -420,12 +423,12 @@ test("should open modal on button click", () => {
     <button id="openBtn">Open</button>
     <dialog id="modal"></dialog>
   `;
-  
+
   const button = document.getElementById("openBtn");
   const modal = document.getElementById("modal");
-  
+
   button.click();
-  
+
   expect(modal.hasAttribute("open")).toBe(true);
 });
 ```
@@ -437,11 +440,13 @@ test("should open modal on button click", () => {
 ### Tests Failing Locally
 
 1. **Clear Jest cache:**
+
    ```bash
    npm test -- --clearCache
    ```
 
 2. **Check Node version:**
+
    ```bash
    node --version  # Should be >= 18
    ```
@@ -496,11 +501,13 @@ test("should open modal on button click", () => {
 ## Resources
 
 ### Documentation
+
 - [Jest Documentation](https://jestjs.io/docs/getting-started)
 - [Testing Library](https://testing-library.com/docs/)
 - [Jest DOM Matchers](https://github.com/testing-library/jest-dom)
 
 ### Learning Resources
+
 - [JavaScript Testing Best Practices](https://github.com/goldbergyoni/javascript-testing-best-practices)
 - [Testing Trophy](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications)
 

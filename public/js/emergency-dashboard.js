@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let incidentCount = 0;
   let dangerLevel = "MODERATE";
   let dangerMessage = "Plan and prepare for fires in your area";
-  let incidents = [];
 
   /**
    * Update all emergency displays with latest data
@@ -43,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dangerLevel = normalizedLevel;
     dangerMessage = message;
     incidentCount = count;
-    incidents = incidentList;
 
     // Update status bar (desktop/tablet)
     if (statusBarDangerLevel) {
@@ -98,26 +96,32 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!emergencyStatusBar) return;
 
     // Remove existing level classes
-    emergencyStatusBar.classList.remove('level-moderate', 'level-high', 'level-extreme', 'level-catastrophic', 'level-none');
+    emergencyStatusBar.classList.remove(
+      "level-moderate",
+      "level-high",
+      "level-extreme",
+      "level-catastrophic",
+      "level-none"
+    );
 
     // Add appropriate class
-    switch(level.toUpperCase()) {
-      case 'HIGH':
-        emergencyStatusBar.classList.add('level-high');
-        break;
-      case 'EXTREME':
-        emergencyStatusBar.classList.add('level-extreme');
-        break;
-      case 'CATASTROPHIC':
-        emergencyStatusBar.classList.add('level-catastrophic');
-        break;
-      case 'NO RATING':
-      case 'N/A':
-      case 'ERROR':
-        emergencyStatusBar.classList.add('level-none');
-        break;
-      default:
-        emergencyStatusBar.classList.add('level-moderate');
+    switch (level.toUpperCase()) {
+    case "HIGH":
+      emergencyStatusBar.classList.add("level-high");
+      break;
+    case "EXTREME":
+      emergencyStatusBar.classList.add("level-extreme");
+      break;
+    case "CATASTROPHIC":
+      emergencyStatusBar.classList.add("level-catastrophic");
+      break;
+    case "NO RATING":
+    case "N/A":
+    case "ERROR":
+      emergencyStatusBar.classList.add("level-none");
+      break;
+    default:
+      emergencyStatusBar.classList.add("level-moderate");
     }
   }
 
@@ -128,17 +132,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!mobileIncidentsList) return;
 
     if (!incidentList || incidentList.length === 0) {
-      mobileIncidentsList.innerHTML = '<p>No active incidents in our area.</p>';
+      mobileIncidentsList.innerHTML = "<p>No active incidents in our area.</p>";
       return;
     }
 
     // Limit to first 3 incidents for mobile view
     const displayIncidents = incidentList.slice(0, 3);
-    let html = '<ul>';
-    displayIncidents.forEach(incident => {
+    let html = "<ul>";
+    displayIncidents.forEach((incident) => {
       html += `<li><strong>${DOMPurify.sanitize(incident.title)}</strong> - ${DOMPurify.sanitize(incident.status)}</li>`;
     });
-    html += '</ul>';
+    html += "</ul>";
 
     if (incidentList.length > 3) {
       html += `<p class="more-incidents">+ ${incidentList.length - 3} more incidents</p>`;
@@ -153,25 +157,25 @@ document.addEventListener("DOMContentLoaded", () => {
   function toggleEmergencyDashboard() {
     if (!emergencyDashboard) return;
 
-    const isHidden = emergencyDashboard.hasAttribute('hidden');
+    const isHidden = emergencyDashboard.hasAttribute("hidden");
     if (isHidden) {
-      emergencyDashboard.removeAttribute('hidden');
+      emergencyDashboard.removeAttribute("hidden");
       // Update expand button icon
       if (expandEmergencyBtn) {
-        const icon = expandEmergencyBtn.querySelector('i');
+        const icon = expandEmergencyBtn.querySelector("i");
         if (icon) {
-          icon.classList.remove('fa-chevron-down');
-          icon.classList.add('fa-chevron-up');
+          icon.classList.remove("fa-chevron-down");
+          icon.classList.add("fa-chevron-up");
         }
       }
     } else {
-      emergencyDashboard.setAttribute('hidden', '');
+      emergencyDashboard.setAttribute("hidden", "");
       // Update expand button icon
       if (expandEmergencyBtn) {
-        const icon = expandEmergencyBtn.querySelector('i');
+        const icon = expandEmergencyBtn.querySelector("i");
         if (icon) {
-          icon.classList.remove('fa-chevron-up');
-          icon.classList.add('fa-chevron-down');
+          icon.classList.remove("fa-chevron-up");
+          icon.classList.add("fa-chevron-down");
         }
       }
     }
@@ -183,11 +187,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function toggleMobileEmergencyPanel() {
     if (!mobileEmergencyPanel) return;
 
-    const isHidden = mobileEmergencyPanel.hasAttribute('hidden');
+    const isHidden = mobileEmergencyPanel.hasAttribute("hidden");
     if (isHidden) {
-      mobileEmergencyPanel.removeAttribute('hidden');
+      mobileEmergencyPanel.removeAttribute("hidden");
     } else {
-      mobileEmergencyPanel.setAttribute('hidden', '');
+      mobileEmergencyPanel.setAttribute("hidden", "");
     }
   }
 
@@ -196,13 +200,13 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   function closeEmergencyDashboardPanel() {
     if (emergencyDashboard) {
-      emergencyDashboard.setAttribute('hidden', '');
+      emergencyDashboard.setAttribute("hidden", "");
     }
     if (expandEmergencyBtn) {
-      const icon = expandEmergencyBtn.querySelector('i');
+      const icon = expandEmergencyBtn.querySelector("i");
       if (icon) {
-        icon.classList.remove('fa-chevron-up');
-        icon.classList.add('fa-chevron-down');
+        icon.classList.remove("fa-chevron-up");
+        icon.classList.add("fa-chevron-down");
       }
     }
   }
@@ -212,43 +216,45 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   function closeMobileEmergencyPanel() {
     if (mobileEmergencyPanel) {
-      mobileEmergencyPanel.setAttribute('hidden', '');
+      mobileEmergencyPanel.setAttribute("hidden", "");
     }
   }
 
   // Event Listeners
   if (emergencyStatusBar) {
-    emergencyStatusBar.addEventListener('click', (e) => {
+    emergencyStatusBar.addEventListener("click", (e) => {
       // Don't toggle if clicking the expand button (it has its own handler)
-      if (!e.target.closest('#expandEmergencyBtn')) {
+      if (!e.target.closest("#expandEmergencyBtn")) {
         toggleEmergencyDashboard();
       }
     });
   }
 
   if (expandEmergencyBtn) {
-    expandEmergencyBtn.addEventListener('click', (e) => {
+    expandEmergencyBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       toggleEmergencyDashboard();
     });
   }
 
   if (closeEmergencyDashboard) {
-    closeEmergencyDashboard.addEventListener('click', closeEmergencyDashboardPanel);
+    closeEmergencyDashboard.addEventListener("click", closeEmergencyDashboardPanel);
   }
 
   if (mobileEmergencyBadge) {
-    mobileEmergencyBadge.addEventListener('click', toggleMobileEmergencyPanel);
+    mobileEmergencyBadge.addEventListener("click", toggleMobileEmergencyPanel);
   }
 
   if (closeMobilePanel) {
-    closeMobilePanel.addEventListener('click', closeMobileEmergencyPanel);
+    closeMobilePanel.addEventListener("click", closeMobileEmergencyPanel);
   }
 
   // Close panels when clicking on action links
-  const dashboardActionLinks = document.querySelectorAll('.dashboard-action-btn, .mobile-action-btn');
-  dashboardActionLinks.forEach(link => {
-    link.addEventListener('click', () => {
+  const dashboardActionLinks = document.querySelectorAll(
+    ".dashboard-action-btn, .mobile-action-btn"
+  );
+  dashboardActionLinks.forEach((link) => {
+    link.addEventListener("click", () => {
       closeEmergencyDashboardPanel();
       closeMobileEmergencyPanel();
     });
@@ -258,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * Integrate with existing fire danger data fetching
    * This function will be called by main.js when fire data is loaded
    */
-  window.updateEmergencyDashboard = function(fireDangerData) {
+  window.updateEmergencyDashboard = function (fireDangerData) {
     if (fireDangerData.dangerLevel) {
       const level = fireDangerData.dangerLevel;
       const message = fireDangerData.message || dangerMessage;
@@ -273,8 +279,8 @@ document.addEventListener("DOMContentLoaded", () => {
   updateEmergencyDisplays(dangerLevel, dangerMessage, incidentCount, []);
 
   // Store preference for dismissing low-priority updates (optional feature)
-  const dismissPreference = localStorage.getItem('dismissLowPriority');
-  if (dismissPreference === 'true' && dangerLevel === 'MODERATE') {
+  const dismissPreference = localStorage.getItem("dismissLowPriority");
+  if (dismissPreference === "true" && dangerLevel === "MODERATE") {
     // Could implement auto-collapse behavior here
   }
 });

@@ -93,10 +93,12 @@ describe("Error Handler Utilities", () => {
     });
 
     test("should handle missing container gracefully", () => {
+      const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
       // Should not throw error
       expect(() => {
         showErrorMessage("non-existent-container", "Test error");
       }).not.toThrow();
+      consoleSpy.mockRestore();
     });
   });
 

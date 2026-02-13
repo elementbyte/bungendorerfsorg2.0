@@ -112,10 +112,10 @@ function initMap() {
 
           // Filter features that contain "COUNCIL AREA: Queanbeyan-Palerang" or "COUNCIL AREA: ACT" in the description
           const filteredFeatures = isTest
-            ? data.features
-            : data.features.filter(
-                (feature) =>
-                  feature.properties &&
+            ? features
+            : features.filter(
+              (feature) =>
+                feature.properties &&
                   feature.properties.description &&
                   (feature.properties.description.includes("COUNCIL AREA: Queanbeyan-Palerang") ||
                     feature.properties.description.includes("COUNCIL AREA: ACT"))
@@ -146,7 +146,6 @@ function initMap() {
                     councilArea,
                     status,
                     type,
-                    fire,
                     size,
                     responsibleAgency,
                     updated,
@@ -242,8 +241,11 @@ function initMap() {
 
           tableHTML += "</table>";
 
-          const totalIncidents = categoryCounts["Emergency Warning"] + categoryCounts["Watch and Act"] +
-                                categoryCounts["Advice"] + categoryCounts["Other"];
+          const totalIncidents =
+            categoryCounts["Emergency Warning"] +
+            categoryCounts["Watch and Act"] +
+            categoryCounts["Advice"] +
+            categoryCounts["Other"];
 
           if (incidentTotalCount) {
             incidentTotalCount.textContent = `${totalIncidents}`;
@@ -258,21 +260,21 @@ function initMap() {
           }
 
           if (incidentCountLabel) {
-            incidentCountLabel.textContent = totalIncidents === 0
-              ? "No active incidents in our area"
-              : "Current incidents in our area";
+            incidentCountLabel.textContent =
+              totalIncidents === 0
+                ? "No active incidents in our area"
+                : "Current incidents in our area";
           }
 
           // Update emergency dashboard with incident data
-          if (typeof window.updateEmergencyDashboard === 'function') {
-
+          if (typeof window.updateEmergencyDashboard === "function") {
             // Build incidents list for mobile view
-            const incidentsList = filteredFeatures.slice(0, 5).map(feature => {
+            const incidentsList = filteredFeatures.slice(0, 5).map((feature) => {
               const fields = extractFields(feature.properties.description);
               return {
-                title: feature.properties.title || 'Unknown',
-                status: fields.status || fields.alertlevel || 'Unknown',
-                location: fields.location || 'Unknown location'
+                title: feature.properties.title || "Unknown",
+                status: fields.status || fields.alertlevel || "Unknown",
+                location: fields.location || "Unknown location",
               };
             });
 
@@ -282,10 +284,10 @@ function initMap() {
 
             if (fireDangerRatingCell && fireDangerMessage) {
               window.updateEmergencyDashboard({
-                dangerLevel: fireDangerRatingCell.textContent || 'MODERATE',
-                message: fireDangerMessage.textContent || 'Plan and prepare for fires in your area',
+                dangerLevel: fireDangerRatingCell.textContent || "MODERATE",
+                message: fireDangerMessage.textContent || "Plan and prepare for fires in your area",
                 incidentCount: totalIncidents,
-                incidents: incidentsList
+                incidents: incidentsList,
               });
             }
           }
@@ -299,10 +301,9 @@ function initMap() {
             className: "station-icon", // custom class for additional styling
           });
 
-          const stationMarker = L.marker(
-            [-35.26165168903826, 149.43974909148088],
-            { icon: stationIcon }
-          );
+          const stationMarker = L.marker([-35.26165168903826, 149.43974909148088], {
+            icon: stationIcon,
+          });
 
           // Get the station card content
           const stationCardContent = document.getElementById("stationCard").innerHTML;
@@ -351,20 +352,21 @@ function initMap() {
             const fireDangerMessage = document.getElementById("fireDangerMessage");
             window.updateEmergencyDashboard({
               dangerLevel: fireDangerRatingCell?.textContent || "NO RATING",
-              message: fireDangerMessage?.textContent || "Rating information currently unavailable.",
+              message:
+                fireDangerMessage?.textContent || "Rating information currently unavailable.",
               incidentCount: 0,
-              incidents: []
+              incidents: [],
             });
           }
         });
     })
-     .catch((error) => {
-       console.error("Error fetching Mapbox token:", error);
-       // Display error on map container if available
-       const mapContainer = document.getElementById("map");
-       if (mapContainer) {
-         const errorMessage = getUserFriendlyErrorMessage(error);
-         mapContainer.innerHTML = DOMPurify.sanitize(`
+    .catch((error) => {
+      console.error("Error fetching Mapbox token:", error);
+      // Display error on map container if available
+      const mapContainer = document.getElementById("map");
+      if (mapContainer) {
+        const errorMessage = getUserFriendlyErrorMessage(error);
+        mapContainer.innerHTML = DOMPurify.sanitize(`
            <div role="alert" style="
              display: flex;
              align-items: center;
@@ -392,8 +394,8 @@ function initMap() {
              </div>
            </div>
          `);
-       }
-     });
+      }
+    });
 }
 
 // Ensure the map is initialized after the DOM content is loaded

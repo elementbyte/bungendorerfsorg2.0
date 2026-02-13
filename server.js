@@ -7,7 +7,7 @@ const allowedOrigins = [
   "https://bungendorerfs.org",
   "https://www.bungendorerfs.org",
   "http://localhost:3000",
-  "https://lively-flower-0577f4700-livedev.eastasia.5.azurestaticapps.net"
+  "https://lively-flower-0577f4700-livedev.eastasia.5.azurestaticapps.net",
 ];
 
 // Middleware to parse JSON bodies
@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Endpoint to get the Mapbox token with origin validation
 app.get("/mapbox-token", (req, res) => {
   let origin = req.headers.origin;
-  
+
   // If no origin header, try to extract from referer
   if (!origin && req.headers.referer) {
     try {
@@ -45,12 +45,12 @@ app.get("/mapbox-token", (req, res) => {
       // Invalid referer URL, ignore
     }
   }
-  
+
   // Allow requests without origin (same-origin requests)
   if (origin && !allowedOrigins.includes(origin)) {
     return res.status(403).json({ error: "Forbidden" });
   }
-  
+
   res.json({ token: process.env.MAPBOX_ACCESS_TOKEN });
 });
 
@@ -105,7 +105,7 @@ function validateContactFormData(data) {
 app.post("/api/contact", async (req, res) => {
   try {
     const webhookUrl = process.env.AZURE_CONTACT_WEBHOOK_URL;
-    
+
     if (!webhookUrl) {
       console.error("AZURE_CONTACT_WEBHOOK_URL not configured");
       return res.status(500).json({ error: "Server configuration error" });
@@ -121,9 +121,9 @@ app.post("/api/contact", async (req, res) => {
     // Validate form data
     const validationErrors = validateContactFormData(req.body);
     if (validationErrors.length > 0) {
-      return res.status(400).json({ 
-        error: "Validation failed", 
-        details: validationErrors 
+      return res.status(400).json({
+        error: "Validation failed",
+        details: validationErrors,
       });
     }
 
@@ -132,20 +132,20 @@ app.post("/api/contact", async (req, res) => {
       name: req.body.name.trim(),
       email: req.body.email.trim().toLowerCase(),
       phone: req.body.phone ? req.body.phone.trim() : "",
-      message: req.body.message.trim()
+      message: req.body.message.trim(),
     };
 
     const response = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sanitizedData)
+      body: JSON.stringify(sanitizedData),
     });
-    
+
     if (!response.ok) {
       console.error(`Azure webhook returned status ${response.status}`);
       return res.status(response.status).json({ error: "Failed to submit form" });
     }
-    
+
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const data = await response.json();
@@ -164,19 +164,19 @@ app.post("/api/contact", async (req, res) => {
 app.get("/api/calendar-events", async (req, res) => {
   try {
     const webhookUrl = process.env.AZURE_CALENDAR_WEBHOOK_URL;
-    
+
     if (!webhookUrl) {
       console.error("AZURE_CALENDAR_WEBHOOK_URL not configured");
       return res.status(500).json({ error: "Server configuration error" });
     }
 
     const response = await fetch(webhookUrl);
-    
+
     if (!response.ok) {
       console.error(`Azure webhook returned status ${response.status}`);
       return res.status(response.status).json({ error: "Failed to fetch events" });
     }
-    
+
     const data = await response.json();
     res.json(data);
   } catch (error) {
@@ -189,7 +189,7 @@ app.get("/api/calendar-events", async (req, res) => {
 app.get("/api/fire-incidents", async (req, res) => {
   try {
     const webhookUrl = process.env.AZURE_INCIDENTS_WEBHOOK_URL;
-    
+
     if (!webhookUrl) {
       console.error("AZURE_INCIDENTS_WEBHOOK_URL not configured");
       return res.status(500).json({ error: "Server configuration error" });
@@ -202,12 +202,12 @@ app.get("/api/fire-incidents", async (req, res) => {
         "Content-Type": "application/json",
       },
     });
-    
+
     if (!response.ok) {
       console.error(`Azure webhook returned status ${response.status}`);
       return res.status(response.status).json({ error: "Failed to fetch incidents" });
     }
-    
+
     const data = await response.json();
     res.json(data);
   } catch (error) {
@@ -220,19 +220,19 @@ app.get("/api/fire-incidents", async (req, res) => {
 app.get("/api/fire-danger", async (req, res) => {
   try {
     const webhookUrl = process.env.AZURE_FIRE_DANGER_WEBHOOK_URL;
-    
+
     if (!webhookUrl) {
       console.error("AZURE_FIRE_DANGER_WEBHOOK_URL not configured");
       return res.status(500).json({ error: "Server configuration error" });
     }
 
     const response = await fetch(webhookUrl);
-    
+
     if (!response.ok) {
       console.error(`Azure webhook returned status ${response.status}`);
       return res.status(response.status).json({ error: "Failed to fetch fire danger" });
     }
-    
+
     const data = await response.text();
     res.set("Content-Type", "application/xml");
     res.send(data);

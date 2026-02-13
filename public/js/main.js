@@ -1,3 +1,4 @@
+/* exported extractFields, populateFireInfoTable, getIconUrl */
 function extractFields(description) {
   const fields = [
     "ALERT LEVEL",
@@ -42,7 +43,6 @@ function populateFireInfoTable(data) {
       councilarea,
       status,
       type,
-      fire,
       size,
       responsibleagency,
       updated,
@@ -89,19 +89,25 @@ function getIconUrl(category) {
   }
 }
 
+window.extractFields = extractFields;
+window.populateFireInfoTable = populateFireInfoTable;
+window.getIconUrl = getIconUrl;
+
 document.addEventListener("DOMContentLoaded", () => {
   // Nav Logo Toggle
   const heroLogo = document.querySelector(".hero .logo");
   const navLogo = document.querySelector(".nav-logo");
 
   function toggleNavLogo() {
-    if (heroLogo && navLogo) { // Check if elements exist
+    if (heroLogo && navLogo) {
+      // Check if elements exist
       const heroLogoRect = heroLogo.getBoundingClientRect();
       navLogo.classList.toggle("visible", heroLogoRect.bottom < 0);
     }
   }
 
-  if (heroLogo && navLogo) { // Add event listener only if elements exist
+  if (heroLogo && navLogo) {
+    // Add event listener only if elements exist
     window.addEventListener("scroll", toggleNavLogo);
     toggleNavLogo(); // Initial check
   }
@@ -115,7 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Bushfire Danger Period Content
   const BFDPContent = document.getElementById("BFDPContent");
-  if (BFDPContent) { // Check if element exists
+  if (BFDPContent) {
+    // Check if element exists
     const inDangerPeriod = isBushfireDangerPeriod();
     const statusText = inDangerPeriod
       ? "We are currently in the bushfire danger period. If you would like to light a fire any larger than a cooking fire you must;"
@@ -152,7 +159,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // const incidentCountCell = document.getElementById("incidentCountCell"); // This variable is declared but not used.
   const fireMessagesDiv = document.getElementById("fireMessages");
 
-  if (fireDangerRatingCell && fireDangerMessage && fireMessagesDiv) { // Check if all necessary elements exist
+  if (fireDangerRatingCell && fireDangerMessage && fireMessagesDiv) {
+    // Check if all necessary elements exist
     fetch("/Content/AFDRSMessages.json")
       .then((response) => response.json())
       .then((fireDangerRatings) => {
@@ -169,7 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const districts = xmlDoc.getElementsByTagName("District");
 
             const southernRangesDistrict = Array.from(districts).find(
-              (district) => district.getElementsByTagName("Name")[0].textContent === "Southern Ranges"
+              (district) =>
+                district.getElementsByTagName("Name")[0].textContent === "Southern Ranges"
             );
 
             if (southernRangesDistrict) {
@@ -212,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
               }
 
               // Update emergency dashboard with fire danger data
-              if (typeof window.updateEmergencyDashboard === 'function') {
+              if (typeof window.updateEmergencyDashboard === "function") {
                 // Get incident count from the page if available
                 const incidentCountCell = document.getElementById("incidentCountCell");
                 let incidentCount = 0;
@@ -225,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   dangerLevel: dangerLevelToday,
                   message: ratingInfo.FireBehaviour || ratingInfo.KeyMessage,
                   incidentCount: incidentCount,
-                  incidents: [] // Will be populated from map data
+                  incidents: [], // Will be populated from map data
                 });
               }
             } else {
@@ -244,14 +253,15 @@ document.addEventListener("DOMContentLoaded", () => {
               fireDangerRatingCell.setAttribute("data-level", "NO RATING");
             }
             if (fireDangerMessage) fireDangerMessage.textContent = "Could not load rating message.";
-            if (fireMessagesDiv) fireMessagesDiv.textContent = "Could not load fire danger information.";
+            if (fireMessagesDiv)
+              fireMessagesDiv.textContent = "Could not load fire danger information.";
 
             if (typeof window.updateEmergencyDashboard === "function") {
               window.updateEmergencyDashboard({
                 dangerLevel: "NO RATING",
                 message: "Rating information currently unavailable.",
                 incidentCount: 0,
-                incidents: []
+                incidents: [],
               });
             }
           });
@@ -261,7 +271,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Display error messages in the UI
         if (fireDangerRatingCell) fireDangerRatingCell.textContent = "Error";
         if (fireDangerMessage) fireDangerMessage.textContent = "Could not load rating message.";
-        if (fireMessagesDiv) fireMessagesDiv.textContent = "Could not load fire danger information.";
+        if (fireMessagesDiv)
+          fireMessagesDiv.textContent = "Could not load fire danger information.";
       });
   }
 });

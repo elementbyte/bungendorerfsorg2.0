@@ -1,4 +1,5 @@
 // Shared modal utilities for calendar events
+/* exported showModal */
 function showModal(event) {
   const modal = document.getElementById("eventModal");
   const modalContent = document.getElementById("modalEventContent");
@@ -11,8 +12,12 @@ function showModal(event) {
   titleElement.textContent = event.subject;
   modalContent.appendChild(titleElement);
 
-  const startDate = luxon.DateTime.fromISO(event.start.dateTime || event.start, { zone: "utc" }).setZone("Australia/Sydney");
-  const endDate = luxon.DateTime.fromISO(event.end.dateTime || event.end, { zone: "utc" }).setZone("Australia/Sydney");
+  const startDate = luxon.DateTime.fromISO(event.start.dateTime || event.start, {
+    zone: "utc",
+  }).setZone("Australia/Sydney");
+  const endDate = luxon.DateTime.fromISO(event.end.dateTime || event.end, { zone: "utc" }).setZone(
+    "Australia/Sydney"
+  );
 
   const dateTimeElement = document.createElement("p");
   dateTimeElement.textContent = event.isAllDay
@@ -35,3 +40,5 @@ function showModal(event) {
   // Show the modal
   modal.setAttribute("open", "");
 }
+
+window.showModal = showModal;

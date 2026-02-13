@@ -2,8 +2,7 @@ const fs = require("fs");
 const path = require("path");
 require("dotenv").config(); // Load environment variables from .env file
 
-
-const targetPath = process.argv[2] || path.join(__dirname, 'public', 'js', 'main.js');
+const targetPath = process.argv[2] || path.join(__dirname, "public", "js", "main.js");
 const filePath = path.isAbsolute(targetPath) ? targetPath : path.join(__dirname, targetPath);
 const accessToken = process.env.MAPBOX_ACCESS_TOKEN;
 

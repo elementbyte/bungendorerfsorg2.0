@@ -6,19 +6,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const localUrl = `${localBasePath}${filePath}`;
 
     fetch(localUrl)
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`Network response was not ok for ${localUrl}`);
         }
         return response.text();
       })
-      .then(markdown => {
+      .then((markdown) => {
         document.getElementById(contentId).innerHTML = DOMPurify.sanitize(marked.parse(markdown));
       })
-      .catch(error => console.error(`Error fetching ${filePath} from local:`, error));
+      .catch((error) => console.error(`Error fetching ${filePath} from local:`, error));
   }
 
-  contentIds.forEach(contentId => {
+  contentIds.forEach((contentId) => {
     const filePath = `${contentId}.md`;
     fetchLocalMarkdownContent(contentId, filePath);
   });

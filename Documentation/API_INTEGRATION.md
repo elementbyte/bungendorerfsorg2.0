@@ -5,6 +5,7 @@ This document describes all API integrations used in the Bungendore RFS website.
 ---
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Server-Side Proxy Endpoints](#server-side-proxy-endpoints)
 - [Azure Logic Apps Integration](#azure-logic-apps-integration)
@@ -20,8 +21,9 @@ This document describes all API integrations used in the Bungendore RFS website.
 The Bungendore RFS website uses a combination of server-side proxy endpoints and external APIs to provide real-time fire safety information and community engagement features.
 
 **Architecture:**
+
 ```
-Frontend (Browser) 
+Frontend (Browser)
     ↓
 Express Server (Proxy)
     ↓
@@ -41,6 +43,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 **Purpose:** Submit contact form data to Azure Logic Apps workflow
 
 **Request Body:**
+
 ```json
 {
   "name": "John Doe",
@@ -51,6 +54,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 ```
 
 **Validation:**
+
 - Name: 2-100 characters
 - Email: Valid email format
 - Phone: Optional, Australian phone format if provided
@@ -58,6 +62,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 - Honeypot check: `website` field must be empty
 
 **Response (Success):**
+
 ```json
 {
   "success": true,
@@ -66,6 +71,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 ```
 
 **Response (Validation Error):**
+
 ```json
 {
   "error": "Validation failed",
@@ -74,6 +80,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 ```
 
 **Backend Logic:**
+
 1. Validates form data
 2. Checks honeypot field for spam
 3. Sanitizes data (trims whitespace, lowercase email)
@@ -89,6 +96,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 **Purpose:** Fetch upcoming events from Azure Logic Apps / Microsoft Graph API
 
 **Response:**
+
 ```json
 {
   "value": [
@@ -111,6 +119,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 ```
 
 **Frontend Processing:**
+
 - Filters events by category:
   - "Public - Training" → Membership events
   - "Public - Community Engagement" → Community events
@@ -126,10 +135,12 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 **Purpose:** Fetch current fire incidents for map display
 
 **Headers:**
+
 - `X-Request-ID: Get-Fire-Incidents`
 - `Content-Type: application/json`
 
 **Response (GeoJSON):**
+
 ```json
 {
   "type": "FeatureCollection",
@@ -151,6 +162,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 ```
 
 **Frontend Processing:**
+
 1. Filters features by council area (Queanbeyan-Palerang, ACT)
 2. Categorizes by alert level (Advice, Watch and Act, Emergency Warning)
 3. Creates map markers with appropriate icons
@@ -165,6 +177,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 **Purpose:** Fetch current fire danger rating for Southern Ranges district
 
 **Response (XML):**
+
 ```xml
 <Districts>
   <District>
@@ -176,6 +189,7 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 ```
 
 **Frontend Processing:**
+
 1. Parses XML using DOMParser
 2. Finds "Southern Ranges" district
 3. Matches danger level with `/Content/AFDRSMessages.json` for:
@@ -194,11 +208,13 @@ All API calls from the frontend go through server-side proxy endpoints to protec
 
 **Origin Validation:**
 Allowed origins:
+
 - `https://www.bungendorerfs.org`
 - `http://localhost:3000`
 - `https://lively-flower-0577f4700-livedev.eastasia.5.azurestaticapps.net`
 
 **Response:**
+
 ```json
 {
   "token": "pk.ey..."
@@ -206,6 +222,7 @@ Allowed origins:
 ```
 
 **Usage:**
+
 - Map tiles for day/night mode
 - Map rendering via Leaflet.js
 
@@ -214,6 +231,7 @@ Allowed origins:
 ## Azure Logic Apps Integration
 
 Azure Logic Apps provides the serverless backend for:
+
 1. Contact form email notifications
 2. Calendar events from Microsoft Graph API
 3. Fire incident data aggregation
@@ -222,11 +240,13 @@ Azure Logic Apps provides the serverless backend for:
 ### Configuration
 
 Each Logic App has a unique HTTP trigger URL with SAS signature:
+
 ```
 https://prod-XX.australiaeast.logic.azure.com/workflows/[WORKFLOW_ID]/triggers/When_a_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=[PERMISSIONS]&sv=1.0&sig=[SIGNATURE]
 ```
 
 **Security:**
+
 - URLs are stored in `.env` file (not in source code)
 - Server-side only (never exposed to client)
 - Can be regenerated via Azure Portal if compromised
@@ -234,6 +254,7 @@ https://prod-XX.australiaeast.logic.azure.com/workflows/[WORKFLOW_ID]/triggers/W
 ### Required Environment Variables
 
 See `.env.example` for complete list:
+
 - `AZURE_CONTACT_WEBHOOK_URL`
 - `AZURE_CALENDAR_WEBHOOK_URL`
 - `AZURE_INCIDENTS_WEBHOOK_URL`
@@ -306,6 +327,7 @@ PORT=3000
 All proxy endpoints return standardized error responses:
 
 **Configuration Error (500):**
+
 ```json
 {
   "error": "Server configuration error"
@@ -313,6 +335,7 @@ All proxy endpoints return standardized error responses:
 ```
 
 **Upstream Error (500):**
+
 ```json
 {
   "error": "Failed to fetch events"
@@ -320,6 +343,7 @@ All proxy endpoints return standardized error responses:
 ```
 
 **Validation Error (400):**
+
 ```json
 {
   "error": "Validation failed",
@@ -418,6 +442,7 @@ curl http://localhost:3000/mapbox-token
 ### Integration Testing
 
 See `__tests__/` directory for:
+
 - Form validation tests
 - Error handling tests
 - API response parsing tests
@@ -429,6 +454,7 @@ See `__tests__/` directory for:
 ### Server Logs
 
 The Express server logs:
+
 - Server startup: `Server is running on port 3000`
 - Configuration errors: `AZURE_*_WEBHOOK_URL not configured`
 - Upstream errors: `Azure webhook returned status XXX`
@@ -443,6 +469,7 @@ The Express server logs:
 ### Recommended Monitoring
 
 For production:
+
 1. Set up Azure Application Insights
 2. Monitor Logic Apps execution history
 3. Set up alerts for:
@@ -457,21 +484,25 @@ For production:
 ### Common Issues
 
 **"Server configuration error"**
+
 - Check `.env` file exists
 - Verify all required variables are set
 - Restart server after changing `.env`
 
 **"Failed to fetch events/incidents"**
+
 - Check Azure Logic Apps are running
 - Verify webhook URLs are current
 - Check Azure Logic Apps execution history
 
 **Map not loading**
+
 - Verify `MAPBOX_ACCESS_TOKEN` is set
 - Check token hasn't been revoked
 - Verify origin is whitelisted in Mapbox
 
 **Form submission fails**
+
 - Check validation rules
 - Verify `AZURE_CONTACT_WEBHOOK_URL` is set
 - Test honeypot isn't being filled
@@ -481,6 +512,7 @@ For production:
 ## Support
 
 For issues or questions:
+
 1. Check this documentation
 2. Review server logs
 3. Check Azure Logic Apps execution history
