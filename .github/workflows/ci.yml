@@ -46,9 +46,6 @@ jobs:
         if: always()
         with:
           file: ./coverage/coverage-final.json
-          fail_ci_if_error: false
-          
-      - name: Security audit
         run: npm audit --production
         
       - name: Check for outdated dependencies
