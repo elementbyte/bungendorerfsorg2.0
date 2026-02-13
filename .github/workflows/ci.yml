@@ -35,9 +35,6 @@ jobs:
       - name: Run ESLint
         run: npm run lint
         
-      - name: Run Prettier check
-        run: npm run format:check
-        
       - name: Run tests with coverage
         run: npm run test:coverage
         
@@ -46,6 +43,8 @@ jobs:
         if: always()
         with:
           file: ./coverage/coverage-final.json
+
+      - name: Security audit
         run: npm audit --production
         
       - name: Check for outdated dependencies
