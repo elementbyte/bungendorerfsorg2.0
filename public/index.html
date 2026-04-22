@@ -29,6 +29,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.css" rel="stylesheet" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -265,8 +266,17 @@
                     <h4>Local Incidents Map</h4>
                   </div>
                   <div class="panel-content">
-                    <div class="fire-info-map">
-                      <div id="map"></div>
+                    <div class="fire-info-map" id="fireInfoMapContainer">
+                      <div class="map-toolbar">
+                        <button id="mapExpandBtn" class="map-expand-btn" type="button" aria-expanded="false">
+                          <i class="fas fa-expand"></i>
+                          <span>Expand</span>
+                        </button>
+                      </div>
+                      <div class="map-layout">
+                        <div id="map" aria-label="Local incident map"></div>
+                        <aside id="mapDetailPanel" class="map-detail-panel" aria-live="polite" hidden></aside>
+                      </div>
                       <div class="incident-summary" aria-live="polite">
                         <div class="incident-count">
                           <span id="incidentTotalCount">0</span> Incidents
@@ -638,6 +648,7 @@
   <script src="js/vendor/luxon.min.js"></script>
   <!-- Include the DOMPurify library -->
   <script src="js/vendor/purify.min.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.js"></script>
 
   <!-- Load my own scripts -->
   <script src="js/error-handler.js" defer></script>

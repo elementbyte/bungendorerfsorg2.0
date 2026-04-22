@@ -8,7 +8,7 @@ on:
       - main
       - liveDev
   pull_request:
-    types: [closed]
+    types: [opened, synchronize, reopened, closed]
     branches:
       - main
 
@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    if: (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
@@ -36,7 +36,7 @@ jobs:
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "./public" # App source code path
-          api_location: "" # Api source code path - optional
+          api_location: "./api" # Api source code path - Azure Functions
           output_location: "." # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
           production_branch: "main"
