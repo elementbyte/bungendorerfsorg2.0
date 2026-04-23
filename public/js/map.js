@@ -9,6 +9,49 @@ const ICONS = {
   station: "/Images/station.png",
 };
 
+// ─── Map constants ────────────────────────────────────────────────────────────
+const DEFAULT_MAP_CENTER = [149.4431761913284, -35.25870948687002];
+// fitBounds padding for the hero map: left is computed dynamically (45% of the
+// container width) to align with the CSS max-width on the hgroup, so incident
+// markers are positioned in the right portion of the viewport.  The other sides
+// use a fixed small offset.
+const HERO_MAP_PADDING_SIDE = 40;
+const HERO_MAP_MAX_ZOOM = 12;
+
+/**
+ * Build the asymmetric padding object for hero-map fitBounds.
+ * Left padding covers 45% of the container width so markers land in the
+ * right portion of the viewport, clear of the title panel.
+ */
+function heroMapFitPadding() {
+  const el = document.getElementById("heroMap");
+  // Fallback 200px ≈ 45% of a minimal 450px hero width; used only if the element
+  // is unexpectedly absent from the DOM.
+  const leftPad = el ? Math.round(el.clientWidth * 0.45) : 200;
+  return { top: HERO_MAP_PADDING_SIDE, bottom: HERO_MAP_PADDING_SIDE, left: leftPad, right: HERO_MAP_PADDING_SIDE };
+}
+
+// ─── Shared helpers ───────────────────────────────────────────────────────────
+
+/**
+ * Resolve the Mapbox light preset based on time-of-day and the OS dark-mode preference.
+ * @returns {"day"|"dusk"|"dawn"|"night"}
+ */
+function calculateLightPreset() {
+  const hour = new Date().getHours();
+  let preset;
+  if (hour < 5) preset = "night";
+  else if (hour < 7) preset = "dawn";
+  else if (hour < 17) preset = "day";
+  else if (hour < 19) preset = "dusk";
+  else preset = "night";
+
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches && preset === "day") {
+    preset = "dusk";
+  }
+  return preset;
+}
+
 // ─── Category helpers ─────────────────────────────────────────────────────────
 function getCategoryKey(category) {
   if (category.includes("Emergency Warning")) return "emergencyWarning";
@@ -261,6 +304,255 @@ function getIconUrlForFeature(feature, categoryCounts) {
 
 // ─── Incident loading ─────────────────────────────────────────────────────────
 
+// ─── Hero state management (Phase 2) ─────────────────────────────────────────
+
+/** Stores the Mapbox token so the hero map can be initialised lazily */
+let _heroMapToken = null;
+/** Tracks whether the hero map instance has been created */
+let _heroMapInitialised = false;
+
+/**
+ * Add incident and station markers to a hero map instance.
+ * Called after the hero map's "load" event fires so the canvas is ready.
+ * @param {mapboxgl.Map} heroMap - The hero map instance.
+ * @param {Array<{coordinates: number[], iconUrl: string, alertLevel: string, category: string}>} markerData
+ */
+function addMarkersToHeroMap(heroMap, markerData) {
+  if (!heroMap || !Array.isArray(markerData)) return;
+
+  markerData.forEach(function(data) {
+    if (!data.coordinates) return;
+    const markerEl = createMarkerElement(data.iconUrl, data.alertLevel, data.category);
+    new mapboxgl.Marker({ element: markerEl, anchor: "bottom" })
+      .setLngLat(data.coordinates)
+      .addTo(heroMap);
+  });
+
+  // Always show the station marker on the hero map
+  const stationEl = createStationMarkerElement();
+  new mapboxgl.Marker({ element: stationEl, anchor: "bottom" })
+    .setLngLat([149.43974909148088, -35.26165168903826])
+    .addTo(heroMap);
+}
+
+/**
+ * Activate the Fire Information tab and scroll it into view.
+ * Used when the user clicks anywhere on the hero map so they are taken
+ * directly to the detailed incident information below the fold.
+ */
+function scrollToFireInfo() {
+  const btn = document.querySelector("[data-tab=\"fire-info\"]");
+  if (btn) btn.click();
+}
+
+/**
+ * Add incident geometry layers (polygon fill, outline, line) to the hero map.
+ * Mirrors addIncidentAreaLayers but uses hero-specific source/layer IDs so there
+ * is no collision with the main Fire Info map, and omits the detail-panel click
+ * handler (hero clicks are handled at the container level via scrollToFireInfo).
+ *
+ * @param {mapboxgl.Map} heroMap
+ * @param {GeoJSON.FeatureCollection} areaFeatureCollection
+ */
+function addHeroAreaLayers(heroMap, areaFeatureCollection) {
+  if (!heroMap || !areaFeatureCollection) return;
+
+  if (heroMap.getSource("hero-incident-areas")) {
+    heroMap.getSource("hero-incident-areas").setData(areaFeatureCollection);
+    return;
+  }
+
+  heroMap.addSource("hero-incident-areas", { type: "geojson", data: areaFeatureCollection });
+
+  heroMap.addLayer({
+    id: "hero-areas-fill",
+    type: "fill",
+    source: "hero-incident-areas",
+    filter: ["==", ["geometry-type"], "Polygon"],
+    paint: {
+      "fill-color": [
+        "match", ["get", "categoryKey"],
+        "emergencyWarning", AREA_FILL_COLOUR.emergencyWarning,
+        "watchAndAct", AREA_FILL_COLOUR.watchAndAct,
+        "advice", AREA_FILL_COLOUR.advice,
+        AREA_FILL_COLOUR.other,
+      ],
+      "fill-opacity": 0.22,
+    },
+  });
+
+  heroMap.addLayer({
+    id: "hero-areas-outline",
+    type: "line",
+    source: "hero-incident-areas",
+    filter: ["==", ["geometry-type"], "Polygon"],
+    paint: {
+      "line-color": [
+        "match", ["get", "categoryKey"],
+        "emergencyWarning", AREA_FILL_COLOUR.emergencyWarning,
+        "watchAndAct", AREA_FILL_COLOUR.watchAndAct,
+        "advice", AREA_FILL_COLOUR.advice,
+        AREA_FILL_COLOUR.other,
+      ],
+      "line-width": 2,
+      "line-opacity": 0.75,
+    },
+  });
+
+  heroMap.addLayer({
+    id: "hero-areas-line",
+    type: "line",
+    source: "hero-incident-areas",
+    filter: ["==", ["geometry-type"], "LineString"],
+    paint: {
+      "line-color": [
+        "match", ["get", "categoryKey"],
+        "emergencyWarning", AREA_FILL_COLOUR.emergencyWarning,
+        "watchAndAct", AREA_FILL_COLOUR.watchAndAct,
+        "advice", AREA_FILL_COLOUR.advice,
+        AREA_FILL_COLOUR.other,
+      ],
+      "line-width": 2.5,
+      "line-dasharray": [3, 2],
+    },
+  });
+}
+
+/**
+ * Toggle the hero between calm (photo) and incident-active (map-led) states.
+ *
+ * When there are active incidents and the hero map hasn't been initialised yet,
+ * the incident count is pre-set in the DOM but the `hero--incident` class is
+ * NOT added here — it is deferred to the heroMap `load` event so the CSS
+ * transition (map fade-in + hgroup narrowing) only fires once the tiles are
+ * actually rendered, producing a smooth crossfade over the background photo.
+ *
+ * @param {number} total - Total number of active incidents.
+ * @param {mapboxgl.LngLatBounds} [bounds] - Bounds of active incidents (used to fit the hero map).
+ * @param {Array} [markerData] - Marker data to render on the hero map.
+ * @param {GeoJSON.FeatureCollection} [areaFeatureCollection] - Incident geometry for the hero map.
+ */
+function updateHeroState(total, bounds, markerData, areaFeatureCollection) {
+  const hero = document.getElementById("heroSection");
+  const heroIncidentPanel = document.getElementById("heroIncidentCountPanel");
+  const heroIncidentCount = document.getElementById("heroIncidentCount");
+
+  if (!hero) return;
+
+  if (total > 0) {
+    // Pre-populate the count text so it is ready when the transition fires
+    if (heroIncidentCount) heroIncidentCount.textContent = total;
+
+    // Initialise the hero map on first incident load.
+    // The hero--incident class (and panel reveal) is deferred to the map load
+    // event so the transition fires only once tiles are ready.
+    if (!_heroMapInitialised && _heroMapToken) {
+      _heroMapInitialised = true;
+      initHeroMap(_heroMapToken, bounds, markerData || [], areaFeatureCollection, hero, heroIncidentPanel);
+    } else if (_heroMapInitialised) {
+      // Map already loaded — apply class immediately and fit to new bounds
+      hero.classList.add("hero--incident");
+      if (heroIncidentPanel) heroIncidentPanel.removeAttribute("hidden");
+      const existingHeroMap = window._heroMapInstance;
+      if (existingHeroMap && bounds && !bounds.isEmpty()) {
+        existingHeroMap.fitBounds(bounds, { padding: heroMapFitPadding(), maxZoom: HERO_MAP_MAX_ZOOM });
+      }
+      if (existingHeroMap && areaFeatureCollection) {
+        addHeroAreaLayers(existingHeroMap, areaFeatureCollection);
+      }
+    }
+  } else {
+    hero.classList.remove("hero--incident");
+    if (heroIncidentPanel) heroIncidentPanel.setAttribute("hidden", "");
+  }
+}
+
+/**
+ * Create a lightweight Mapbox GL map in #heroMap that mirrors the incident view.
+ * Once the map tiles are loaded and markers placed, `hero--incident` is added to
+ * the hero element to trigger the CSS crossfade transition (map opacity 0→1 and
+ * hgroup max-width narrowing) so the change is smooth rather than abrupt.
+ *
+ * @param {string} token - Mapbox access token.
+ * @param {mapboxgl.LngLatBounds} [bounds] - Incident bounds to fit on load.
+ * @param {Array} [markerData] - Marker data to render on the hero map.
+ * @param {HTMLElement} [heroEl] - The hero section element.
+ * @param {HTMLElement} [heroIncidentPanel] - The incident count panel element.
+ */
+function initHeroMap(token, bounds, markerData, areaFeatureCollection, heroEl, heroIncidentPanel) {
+  const heroMapEl = document.getElementById("heroMap");
+  if (!heroMapEl) return;
+
+  mapboxgl.accessToken = token;
+
+  const heroMap = new mapboxgl.Map({
+    container: "heroMap",
+    style: "mapbox://styles/mapbox/standard",
+    center: DEFAULT_MAP_CENTER,
+    zoom: 10,
+    interactive: false, /* decorative surface; full interaction is in the Fire Info map */
+    attributionControl: false,
+  });
+
+  window._heroMapInstance = heroMap;
+
+  // Clicking anywhere on the hero map (marker or canvas) navigates to the
+  // Fire Information tab so the user can see incident detail below the fold.
+  // The container element always receives DOM click events even when the map
+  // is initialised with interactive: false.
+  heroMapEl.addEventListener("click", scrollToFireInfo);
+
+  heroMap.on("load", function() {
+    const preset = calculateLightPreset();
+    if (typeof heroMap.setConfigProperty === "function") {
+      heroMap.setConfigProperty("basemap", "lightPreset", preset);
+      heroMap.setConfigProperty("basemap", "show3dObjects", false);
+    }
+
+    addMarkersToHeroMap(heroMap, markerData || []);
+
+    // Render incident geometry (polygon fills/outlines, line strings) so the
+    // hero map mirrors the extent overlays visible on the main Fire Info map.
+    if (areaFeatureCollection) {
+      addHeroAreaLayers(heroMap, areaFeatureCollection);
+    }
+
+    // Ensure the Mapbox canvas is sized to match the container.
+    // This is necessary in case the canvas was created before the browser had
+    // fully laid out the container (e.g. during a hidden/opacity-0 init).
+    heroMap.resize();
+
+    if (bounds && !bounds.isEmpty()) {
+      heroMap.fitBounds(bounds, { padding: heroMapFitPadding(), maxZoom: HERO_MAP_MAX_ZOOM });
+    }
+
+    // Trigger the CSS transition now that tiles + markers are ready.
+    // The map fades in over the background photo; the hgroup narrows smoothly.
+    if (heroEl) heroEl.classList.add("hero--incident");
+    if (heroIncidentPanel) heroIncidentPanel.removeAttribute("hidden");
+
+    // After the opacity transition completes (0.9 s), resize again to correct
+    // any pixel-density mismatch that occurred while the canvas was at opacity:0.
+    // Also re-fit bounds so markers are correctly positioned in the final viewport.
+    setTimeout(function() {
+      heroMap.resize();
+      if (bounds && !bounds.isEmpty()) {
+        heroMap.fitBounds(bounds, { padding: heroMapFitPadding(), maxZoom: HERO_MAP_MAX_ZOOM, animate: false });
+      }
+    }, 1000);
+
+    // ResizeObserver keeps the canvas correctly sized whenever the hero container
+    // changes dimensions (e.g. window resize), matching the pattern used for the
+    // main fire-info map.
+    if (typeof ResizeObserver !== "undefined") {
+      const heroRo = new ResizeObserver(function() {
+        heroMap.resize();
+      });
+      heroRo.observe(heroMapEl);
+    }
+  });
+}
+
 function loadIncidentData(map) {
   fetch(getApiBaseUrl() + "/api/fire-incidents", {
     method: "GET",
@@ -283,6 +575,7 @@ function loadIncidentData(map) {
       const bounds = new mapboxgl.LngLatBounds();
       const incidentsList = [];
       const areaFeatures = [];
+      const markerDataList = [];
 
       filteredFeatures.forEach(function(feature) {
         const category = (feature.properties && feature.properties.category) || "";
@@ -327,6 +620,9 @@ function loadIncidentData(map) {
             .addTo(map);
 
           bounds.extend(coordinates);
+
+          // Collect data so the hero map can render the same markers
+          markerDataList.push({ coordinates: coordinates, iconUrl: iconUrl, alertLevel: alertLevel, category: category });
         }
 
         incidentsList.push({
@@ -343,6 +639,16 @@ function loadIncidentData(map) {
       addStationMarker(map, bounds);
       updateIncidentSummary(categoryCounts);
       updateEmergencyWidget(incidentsList, categoryCounts);
+
+      const total =
+        categoryCounts["Emergency Warning"] +
+        categoryCounts["Watch and Act"] +
+        categoryCounts.Advice +
+        categoryCounts.Other;
+      const heroAreaCollection = areaFeatures.length > 0
+        ? { type: "FeatureCollection", features: areaFeatures }
+        : null;
+      updateHeroState(total, bounds, markerDataList, heroAreaCollection);
 
       if (!bounds.isEmpty()) {
         map.fitBounds(bounds, { padding: 80, maxZoom: 12 });
@@ -509,11 +815,13 @@ function showMapError(error) {
 
 function createStandardMap(accessToken) {
   mapboxgl.accessToken = accessToken;
+  /* Store token so the hero map can be initialised once incidents are known */
+  _heroMapToken = accessToken;
 
   const map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/standard",
-    center: [149.4431761913284, -35.25870948687002],
+    center: DEFAULT_MAP_CENTER,
     zoom: 10,
     pitch: 55,
     bearing: -12,
@@ -526,23 +834,8 @@ function createStandardMap(accessToken) {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
   let currentLightPreset = "";
 
-  const getTimeOfDayPreset = function() {
-    const hour = new Date().getHours();
-    if (hour < 5) return "night";
-    if (hour < 7) return "dawn";
-    if (hour < 17) return "day";
-    if (hour < 19) return "dusk";
-    return "night";
-  };
-
-  const resolveStyledLightPreset = function() {
-    const timePreset = getTimeOfDayPreset();
-    if (!prefersDark.matches) return timePreset;
-    return timePreset === "day" ? "dusk" : timePreset;
-  };
-
   const updateLightPreset = function() {
-    const lightPreset = resolveStyledLightPreset();
+    const lightPreset = calculateLightPreset();
     if (lightPreset === currentLightPreset) return;
     if (typeof map.setConfigProperty === "function") {
       map.setConfigProperty("basemap", "lightPreset", lightPreset);
@@ -669,4 +962,80 @@ function initMap() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", initMap);
+// ─── Dynamic Mapbox GL loader ─────────────────────────────────────────────────
+
+/**
+ * Dynamically load the Mapbox GL JS bundle and its companion CSS.
+ * Resolves when the script is ready; rejects on network error.
+ * Safe to call multiple times – subsequent calls resolve immediately.
+ */
+let _mapboxLoadPromise = null;
+
+function loadMapbox() {
+  if (_mapboxLoadPromise) return _mapboxLoadPromise;
+  _mapboxLoadPromise = new Promise(function(resolve, reject) {
+    const MAPBOX_VERSION = "v3.9.4";
+    const MAPBOX_BASE    = "https://api.mapbox.com/mapbox-gl-js/" + MAPBOX_VERSION;
+
+    // Inject CSS
+    const link = document.createElement("link");
+    link.rel  = "stylesheet";
+    link.href = MAPBOX_BASE + "/mapbox-gl.css";
+    document.head.appendChild(link);
+
+    // Inject JS
+    const script = document.createElement("script");
+    script.src     = MAPBOX_BASE + "/mapbox-gl.js";
+    script.onload  = resolve;
+    script.onerror = function() {
+      reject(new Error("Failed to load Mapbox GL JS"));
+    };
+    document.head.appendChild(script);
+  });
+  return _mapboxLoadPromise;
+}
+
+/**
+ * Bootstrap: use IntersectionObserver to kick off the Mapbox load + map init
+ * as soon as the map container (or the hero) enters the viewport.
+ * Falls back to immediate load on browsers without IntersectionObserver.
+ */
+document.addEventListener("DOMContentLoaded", function() {
+  const mapContainer  = document.getElementById("fireInfoMapContainer");
+  const heroSection   = document.getElementById("heroSection");
+  let initiated       = false;
+
+  function start() {
+    if (initiated) return;
+    initiated = true;
+    loadMapbox()
+      .then(initMap)
+      .catch(function(err) {
+        console.error("Mapbox GL load failed:", err);
+        showMapError(err);
+      });
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    // Fallback for older browsers
+    start();
+    return;
+  }
+
+  // Use a generous root margin so the library starts loading before
+  // the map section is fully scrolled into view.
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        start();
+        observer.disconnect();
+      }
+    });
+  }, { rootMargin: "300px" });
+
+  if (mapContainer) observer.observe(mapContainer);
+  if (heroSection)  observer.observe(heroSection);
+
+  // Safety: if neither element found, load immediately
+  if (!mapContainer && !heroSection) start();
+});

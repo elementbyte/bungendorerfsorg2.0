@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tabButtons.forEach((btn) => {
       btn.classList.remove("active");
       btn.setAttribute("aria-selected", "false");
+      btn.setAttribute("tabindex", "-1"); // roving tabindex: all inactive → -1
     });
 
     tabPanels.forEach((panel) => {
@@ -79,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (targetButton) {
       targetButton.classList.add("active");
       targetButton.setAttribute("aria-selected", "true");
+      targetButton.setAttribute("tabindex", "0"); // roving tabindex: selected → 0
     }
 
     if (targetPanel) {
@@ -93,10 +95,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Save to localStorage
     localStorage.setItem("activeTab", tabId);
 
-    // Scroll to tabs container or active accordion content
+    // Scroll to tab navigation or active accordion content
     if (scroll) {
-      const tabsContainer = document.querySelector(".content-tabs-container");
-      let scrollTarget = tabsContainer;
+      const tabNavigation = document.querySelector(".tab-navigation");
+      let scrollTarget = tabNavigation;
 
       if (window.innerWidth <= 768) {
         const targetPanel = document.getElementById(`${tabId}-tab`);
@@ -196,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Keyboard navigation
+    // Keyboard navigation (roving tabindex + WAI-ARIA tablist pattern)
     button.addEventListener("keydown", (e) => {
       const currentIndex = Array.from(tabButtons).indexOf(button);
 
@@ -205,20 +207,33 @@ document.addEventListener("DOMContentLoaded", () => {
       case "ArrowRight":
         e.preventDefault();
         targetIndex = (currentIndex + 1) % tabButtons.length;
+        tabButtons[currentIndex].setAttribute("tabindex", "-1");
+        tabButtons[targetIndex].setAttribute("tabindex", "0");
         tabButtons[targetIndex].focus();
         break;
       case "ArrowLeft":
         e.preventDefault();
         targetIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+        tabButtons[currentIndex].setAttribute("tabindex", "-1");
+        tabButtons[targetIndex].setAttribute("tabindex", "0");
         tabButtons[targetIndex].focus();
         break;
       case "Home":
         e.preventDefault();
+        tabButtons[currentIndex].setAttribute("tabindex", "-1");
+        tabButtons[0].setAttribute("tabindex", "0");
         tabButtons[0].focus();
         break;
       case "End":
         e.preventDefault();
+        tabButtons[currentIndex].setAttribute("tabindex", "-1");
+        tabButtons[tabButtons.length - 1].setAttribute("tabindex", "0");
         tabButtons[tabButtons.length - 1].focus();
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        switchTab(button.getAttribute("data-tab") || "", { updateUrl: true, scroll: false });
         break;
       default:
         break;
