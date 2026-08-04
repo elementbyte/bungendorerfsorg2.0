@@ -6,7 +6,6 @@ const ICONS = {
   watchAndAct: "/Images/watch-and-act.png",
   emergencyWarning: "/Images/emergency-warning.png",
   other: "/Images/other.png",
-  station: "/Images/station.png",
 };
 
 // ─── Map constants ────────────────────────────────────────────────────────────
@@ -64,11 +63,15 @@ function getCategoryClass(category) {
   return getCategoryKey(category).replace(/([A-Z])/g, (m) => "-" + m.toLowerCase());
 }
 
-/** Area fill colour per alert level for polygon overlays */
+/** Area fill colour per alert level for polygon overlays. Matches the
+ *  official Australian Warning System (AWS) colours used by the
+ *  advice/watch-and-act/emergency-warning marker icons — sampled directly
+ *  from those PNG assets so the polygon fill always agrees with the marker:
+ *  Advice yellow, Watch and Act orange, Emergency Warning red. */
 const AREA_FILL_COLOUR = {
-  emergencyWarning: "#d7261e",
-  watchAndAct: "#f5a623",
-  advice: "#215e9e",
+  emergencyWarning: "#d6001c",
+  watchAndAct: "#ff7900",
+  advice: "#fbe032",
   other: "#5f6368",
 };
 
@@ -101,13 +104,17 @@ function createStationMarkerElement() {
   wrapper.setAttribute("tabindex", "0");
   wrapper.setAttribute("aria-label", "Bungendore RFS Station");
 
-  const img = document.createElement("img");
-  img.src = ICONS.station;
-  img.alt = "Bungendore RFS Station";
-  img.draggable = false;
-  img.className = "aws-marker__img aws-marker__img--station";
+  // Same warehouse icon as the footer's Station entry, in a solid colour
+  // badge — the old black-line-art station.png was unreadable against the
+  // map basemap (especially in dark mode).
+  const badge = document.createElement("span");
+  badge.className = "aws-marker__badge aws-marker__badge--station";
+  const icon = document.createElement("i");
+  icon.className = "fas fa-warehouse";
+  icon.setAttribute("aria-hidden", "true");
+  badge.appendChild(icon);
 
-  wrapper.appendChild(img);
+  wrapper.appendChild(badge);
   return wrapper;
 }
 
@@ -168,7 +175,7 @@ function buildStationDetailHTML() {
   const raw = stationCard ? stationCard.innerHTML : "<p>Bungendore RFS Station</p>";
   return (
     "<div class=\"map-detail-header\">" +
-    "<img src=\"" + ICONS.station + "\" alt=\"Station\" class=\"map-detail-icon\" />" +
+    "<i class=\"fas fa-warehouse map-detail-icon\" aria-hidden=\"true\"></i>" +
     "<p class=\"map-detail-title\">Bungendore RFS Station</p></div>" +
     "<div class=\"map-detail-station-body\">" + raw + "</div>"
   );
