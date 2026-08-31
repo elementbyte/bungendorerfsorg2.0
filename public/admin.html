@@ -85,7 +85,7 @@
       <div class="shell">
         <nav class="nav" aria-label="Members area sections">
           <button class="nav__item is-active" data-view="duty" type="button">
-            Duty line<span class="nav__note">phone forwarding</span>
+            Brigade phone<span class="nav__note">where public calls go</span>
           </button>
           <button class="nav__item" data-view="events" type="button">
             Events &amp; training<span class="nav__note">community &amp; drill calendar</span>
@@ -96,18 +96,45 @@
         </nav>
 
         <main id="main" class="content">
-          <!-- Duty line (built in a later change) -->
+          <!-- Brigade phone -->
           <section id="view-duty" class="view">
-            <h2>Duty line</h2>
-            <div class="placeholder">
-              <p class="placeholder__lead">The call-forwarding switch will live here.</p>
-              <p>
-                Today the public number is forwarded using a lookup that depends on the old
-                Microsoft&nbsp;365 tenant. This screen will show which phone is on duty, when it
-                last changed, and let an authorised member take the line.
-              </p>
-              <p class="placeholder__tag">Coming in the next update</p>
+            <h2>Brigade phone</h2>
+            <p class="view__lead">
+              Calls and texts to the brigade&rsquo;s public number are forwarded to whichever phone
+              is set here.
+            </p>
+
+            <div id="dutyCard" class="duty-card" aria-live="polite">
+              <div class="duty-card__row">
+                <span class="duty-dot" id="dutyDot"></span>
+                <span id="dutyState">Loading&hellip;</span>
+              </div>
+              <p class="duty-card__num" id="dutyNumber">&mdash;</p>
+              <p class="duty-card__meta" id="dutyMeta"></p>
             </div>
+
+            <form id="dutyForm" class="duty-form" novalidate>
+              <label for="dutyInput">Change the brigade phone number</label>
+              <div class="duty-form__row">
+                <input
+                  id="dutyInput"
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="off"
+                  placeholder="0488 880 286"
+                />
+                <button type="submit" class="btn btn--primary">Set number</button>
+              </div>
+              <p class="duty-form__hint">
+                Australian mobile or landline. This takes effect on the next incoming call.
+              </p>
+            </form>
+            <p id="dutyMsg" class="msg" role="status" aria-live="polite" hidden></p>
+
+            <h3 class="duty-history__h">Recent changes</h3>
+            <ul id="dutyHistory" class="duty-history">
+              <li class="duty-history__empty">&mdash;</li>
+            </ul>
           </section>
 
           <!-- Events & training (built in a later change) -->
@@ -123,7 +150,7 @@
                 website&rsquo;s own store so the public pages keep working after the tenant is
                 retired.
               </p>
-              <p class="placeholder__tag">Coming after the duty line</p>
+              <p class="placeholder__tag">Coming after the brigade phone</p>
             </div>
           </section>
 
