@@ -21,6 +21,9 @@ const {
   handleEnquiriesList,
   handleEnquiryUpdate,
   handleEnquiryDelete,
+  handleSocialChat,
+  handleSocialPromptGet,
+  handleSocialPromptSet,
 } = require("./api/shared/handlers");
 
 const allowedOrigins = [
@@ -30,8 +33,10 @@ const allowedOrigins = [
   "https://lively-flower-0577f4700-livedev.eastasia.5.azurestaticapps.net",
 ];
 
-// Middleware to parse JSON bodies
-app.use(express.json());
+// Middleware to parse JSON bodies. 5mb ceiling matches the shared handlers'
+// contract: /api/social/chat accepts image data URLs up to ~3mb (plus the
+// transcript envelope). Every endpoint still length-checks its own inputs.
+app.use(express.json({ limit: "5mb" }));
 
 // Basic CORS handling for API requests when routed via redirects
 app.use((req, res, next) => {
@@ -285,6 +290,10 @@ app.delete(
   "/api/enquiries/:id",
   mirror((req) => handleEnquiryDelete(req.params.id, req, process.env))
 );
+
+app.post("/api/social/chat", mirror(handleSocialChat));
+app.get("/api/social/prompt", mirror(handleSocialPromptGet));
+app.put("/api/social/prompt", mirror(handleSocialPromptSet));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
